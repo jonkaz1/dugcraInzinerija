@@ -1,0 +1,6 @@
+C:\!!KTU\4 Semestras\Programu sistemu inzinerija\Projektas\AlgorithmAnalysis\AlgorithmAnalysis\bin\Debug\AlgorithmAnalysis.exe.config
+C:\!!KTU\4 Semestras\Programu sistemu inzinerija\Projektas\AlgorithmAnalysis\AlgorithmAnalysis\obj\Debug\AlgorithmAnalysis.csprojResolveAssemblyReference.cache
+C:\!!KTU\4 Semestras\Programu sistemu inzinerija\Projektas\AlgorithmAnalysis\AlgorithmAnalysis\bin\Debug\AlgorithmAnalysis.exe
+C:\!!KTU\4 Semestras\Programu sistemu inzinerija\Projektas\AlgorithmAnalysis\AlgorithmAnalysis\bin\Debug\AlgorithmAnalysis.pdb
+C:\!!KTU\4 Semestras\Programu sistemu inzinerija\Projektas\AlgorithmAnalysis\AlgorithmAnalysis\obj\Debug\AlgorithmAnalysis.exe
+C:\!!KTU\4 Semestras\Programu sistemu inzinerija\Projektas\AlgorithmAnalysis\AlgorithmAnalysis\obj\Debug\AlgorithmAnalysis.pdb
