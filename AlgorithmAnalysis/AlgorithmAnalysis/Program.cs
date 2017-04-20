@@ -5,8 +5,8 @@ namespace AlgorithmAnalysis
 {
     class Program
     {
-        public static int generatedMapNumber = 1000;
-        public static int size = 17;
+        public static int generatedMapNumber = 1000;    //Generated maps number
+        public static int size = 17;                    //Map array size
 
         static void Main(string[] args)
         {
@@ -45,6 +45,9 @@ namespace AlgorithmAnalysis
                 }
             } while (exit == false);
         }
+        /// <summary>
+        /// User interface
+        /// </summary>
         static public void DisplayMenu()
         {
             Console.WriteLine("\n Menu map generating algorithms\n");
@@ -55,6 +58,10 @@ namespace AlgorithmAnalysis
             Console.WriteLine(">5. Exit \n");
             Console.Write(">");
         }
+
+        /// <summary>
+        /// Prim's algorithm test
+        /// </summary>
         public static void Test_Prim_Algorithm()
         {
             MapClass mapArray = new MapClass(size);
@@ -64,6 +71,9 @@ namespace AlgorithmAnalysis
 
 
         }
+        /// <summary>
+        /// Recursive backtracing algorithm test
+        /// </summary>
         public static void Test_Recursive_Backtracing_Algorithm()
         {
             MapClass mapArray = new MapClass(size);
@@ -73,6 +83,9 @@ namespace AlgorithmAnalysis
 
 
         }
+        /// <summary>
+        /// Hunt and kill algorithm test
+        /// </summary>
         public static void Test_HuntAndKill_Algorithm()
         {
             MapClass mapArray = new MapClass(size);
@@ -83,6 +96,11 @@ namespace AlgorithmAnalysis
 
         }
 
+
+        /// <summary>
+        /// Algorithm analysis (only generating time at this moment)
+        /// </summary>
+        /// <param name="container"></param>
         public static void Analysis(MapsContainer container)
         {
             Console.WriteLine("\n Prim's algorithm \n\n N       Runtime\n");

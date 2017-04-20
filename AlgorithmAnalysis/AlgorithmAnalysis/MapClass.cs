@@ -6,7 +6,7 @@ namespace AlgorithmAnalysis
     {
         public int[,] data;
 
-        //Integer number means generating algorithm (1-Prim's; 2-RecursiveBacktracing, etc.)
+        //Integer number means generated algorithm number (1-Prim's; 2-RecursiveBacktracing, etc.)
         public int algorithm;
 
         public MapClass(int size)
