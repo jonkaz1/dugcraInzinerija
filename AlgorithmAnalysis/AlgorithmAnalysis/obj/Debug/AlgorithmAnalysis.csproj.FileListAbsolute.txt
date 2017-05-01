@@ -10,3 +10,9 @@ C:\Unity projects\Inzinerija\dugcraInzinerija\AlgorithmAnalysis\AlgorithmAnalysi
 C:\Unity projects\Inzinerija\dugcraInzinerija\AlgorithmAnalysis\AlgorithmAnalysis\bin\Debug\AlgorithmAnalysis.exe
 C:\Unity projects\Inzinerija\dugcraInzinerija\AlgorithmAnalysis\AlgorithmAnalysis\bin\Debug\AlgorithmAnalysis.pdb
 C:\Unity projects\Inzinerija\dugcraInzinerija\AlgorithmAnalysis\AlgorithmAnalysis\obj\Debug\AlgorithmAnalysis.csprojResolveAssemblyReference.cache
+C:\Karolio\github\dugrcaInzinerija\dugcraInzinerija\AlgorithmAnalysis\AlgorithmAnalysis\bin\Debug\AlgorithmAnalysis.exe.config
+C:\Karolio\github\dugrcaInzinerija\dugcraInzinerija\AlgorithmAnalysis\AlgorithmAnalysis\obj\Debug\AlgorithmAnalysis.exe
+C:\Karolio\github\dugrcaInzinerija\dugcraInzinerija\AlgorithmAnalysis\AlgorithmAnalysis\obj\Debug\AlgorithmAnalysis.pdb
+C:\Karolio\github\dugrcaInzinerija\dugcraInzinerija\AlgorithmAnalysis\AlgorithmAnalysis\bin\Debug\AlgorithmAnalysis.exe
+C:\Karolio\github\dugrcaInzinerija\dugcraInzinerija\AlgorithmAnalysis\AlgorithmAnalysis\bin\Debug\AlgorithmAnalysis.pdb
+C:\Karolio\github\dugrcaInzinerija\dugcraInzinerija\AlgorithmAnalysis\AlgorithmAnalysis\obj\Debug\AlgorithmAnalysis.csprojResolveAssemblyReference.cache

@@ -30,12 +30,12 @@ namespace AlgorithmAnalysis
         /// </summary>
         public void print()
         {
-            Console.WriteLine(" size: {0}x{0}\n", data.GetLength(0));
+            Console.WriteLine(" size: {0}x{0}\n", length);
             for (int x = 0; x < length; x++)
             {
                 for (int y = 0; y < length; y++)
                 {
-                    Console.Write(" {0} ", data[x, y]);
+                    Console.Write("{0}", (char)data[x, y].Data);
                 }
                 Console.WriteLine();
             }
@@ -49,12 +49,14 @@ namespace AlgorithmAnalysis
         public void generateMapPrim()
         {
             algorithm = 1;
+            int wall = 35;
+            int ground = 32;
             //Generate double array with prim algorithm
             for (int x = 0; x < length; x++)
             {
                 for (int y = 0; y < length; y++)
                 {
-                    data[x, y] = new Node(1);
+                    data[x, y] = new Node(wall);
                     data[x, y].Position = new Point(x, y);
                     if (y > 0)
                     {
@@ -70,15 +72,64 @@ namespace AlgorithmAnalysis
             }
             Random r = new Random();
             Node current = data[r.Next(0, length), r.Next(0, length)];
+            current.Data = ground;
 
             List<Node> validNodes = new List<Node>();
-                     
+
             for (int i = 0; i < 4; i++)
             {
                 if (current[i] != null)
                 {
-                    
+                    validNodes.Add(current[i]);
+                    current.Data = ground;
                 }
+            }
+            while (validNodes.Count > 0)
+            {
+                int ran = r.Next(0, validNodes.Count);
+
+                List<Node> readyNeighbours = new List<Node>();
+
+                #region ifs
+                if (validNodes[ran][0] != null && validNodes[ran][0].Data == wall
+                            && validNodes[ran][0][3] != null && validNodes[ran][0][1] != null
+                            && validNodes[ran][0][3].Data == wall && validNodes[ran][0][1].Data == wall
+                            && validNodes[ran][0][0] != null && validNodes[ran][0][0].Data == wall)
+                {
+                    readyNeighbours.Add(validNodes[ran][0]);
+                }
+                if (validNodes[ran][1] != null && validNodes[ran][1].Data == wall
+                    && validNodes[ran][1][0] != null && validNodes[ran][1][2] != null
+                    && validNodes[ran][1][0].Data == wall && validNodes[ran][1][2].Data == wall
+                    && validNodes[ran][1][1] != null && validNodes[ran][1][1].Data == wall)
+                {
+                    readyNeighbours.Add(validNodes[ran][1]);
+                }
+                if (validNodes[ran][2] != null && validNodes[ran][2].Data == wall
+                    && validNodes[ran][2][3] != null && validNodes[ran][2][1] != null
+                    && validNodes[ran][2][3].Data == wall && validNodes[ran][2][1].Data == wall
+                    && validNodes[ran][2][2] != null && validNodes[ran][2][2].Data == wall)
+                {
+                    readyNeighbours.Add(validNodes[ran][2]);
+                }
+                if (validNodes[ran][3] != null && validNodes[ran][3].Data == wall
+                    && validNodes[ran][3][0] != null && validNodes[ran][3][2] != null
+                    && validNodes[ran][3][0].Data == wall && validNodes[ran][3][2].Data == wall
+                    && validNodes[ran][3][3] != null && validNodes[ran][3][3].Data == wall)
+                {
+                    readyNeighbours.Add(validNodes[ran][3]);
+                }
+                #endregion
+
+                while (readyNeighbours.Count > 0)
+                {
+                    int rand = r.Next(0, readyNeighbours.Count);
+                    readyNeighbours[rand].Data = ground;
+                    validNodes.Add(readyNeighbours[rand]);
+                    readyNeighbours.RemoveAt(rand);
+                }
+
+                validNodes.RemoveAt(ran);
             }
         }
 
@@ -183,20 +234,20 @@ namespace AlgorithmAnalysis
                 }
                 set
                 {
-                    pos = value;                    
+                    pos = value;
                 }
             }
         }
 
         public struct Point
         {
-            public int x, y;   
-            
+            public int x, y;
+
             public Point(int x, int y)
             {
                 this.x = x;
                 this.y = y;
-            }                     
+            }
         }
     }
 }

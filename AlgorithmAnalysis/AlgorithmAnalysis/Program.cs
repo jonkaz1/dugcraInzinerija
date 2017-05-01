@@ -6,7 +6,7 @@ namespace AlgorithmAnalysis
     class Program
     {
         public static int generatedMapNumber = 1000;    //Generated maps number
-        public static int size = 17;                    //Map array size
+        public static int size = 16;                    //Map array size
 
         static void Main(string[] args)
         {
