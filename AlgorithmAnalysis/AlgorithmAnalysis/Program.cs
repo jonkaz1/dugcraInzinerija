@@ -6,7 +6,7 @@ namespace AlgorithmAnalysis
     class Program
     {
         public static int generatedMapNumber = 1000;    //Generated maps number
-        public static int size = 16;                    //Map array size
+        public static int size = 15;                    //Map array size
 
         static void Main(string[] args)
         {
@@ -88,13 +88,20 @@ namespace AlgorithmAnalysis
         /// </summary>
         public static void Test_HuntAndKill_Algorithm()
         {
-            MapClass mapArray = new MapClass(size);
+            char[][] mapArray = new char[size][];
             Console.WriteLine("\n Double array generated with Hunt&Kill algorithm \n");
-            mapArray.generateMapHuntAndKill();
-            mapArray.print();
+            mapArray = HuntAndKill.GenerateMap();
 
-
-        }
+            Console.WriteLine(" size: {0}x{0}\n", mapArray.Length);
+            for (int i = 0; i < mapArray.Length; i++)
+            {
+                for (int j = 0; j < mapArray.Length; j++)
+                {
+                    Console.Write(mapArray[i][j]);
+                }
+                Console.WriteLine();
+            }
+    }
 
 
         /// <summary>

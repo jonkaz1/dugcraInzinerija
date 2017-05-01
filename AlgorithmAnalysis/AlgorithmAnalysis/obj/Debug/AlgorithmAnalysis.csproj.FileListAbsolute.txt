@@ -16,3 +16,8 @@ C:\Karolio\github\dugrcaInzinerija\dugcraInzinerija\AlgorithmAnalysis\AlgorithmA
 C:\Karolio\github\dugrcaInzinerija\dugcraInzinerija\AlgorithmAnalysis\AlgorithmAnalysis\bin\Debug\AlgorithmAnalysis.exe
 C:\Karolio\github\dugrcaInzinerija\dugcraInzinerija\AlgorithmAnalysis\AlgorithmAnalysis\bin\Debug\AlgorithmAnalysis.pdb
 C:\Karolio\github\dugrcaInzinerija\dugcraInzinerija\AlgorithmAnalysis\AlgorithmAnalysis\obj\Debug\AlgorithmAnalysis.csprojResolveAssemblyReference.cache
+C:\Users\pulei\Documents\GitHub\dugcraInzinerija\AlgorithmAnalysis\AlgorithmAnalysis\bin\Debug\AlgorithmAnalysis.exe.config
+C:\Users\pulei\Documents\GitHub\dugcraInzinerija\AlgorithmAnalysis\AlgorithmAnalysis\obj\Debug\AlgorithmAnalysis.exe
+C:\Users\pulei\Documents\GitHub\dugcraInzinerija\AlgorithmAnalysis\AlgorithmAnalysis\obj\Debug\AlgorithmAnalysis.pdb
+C:\Users\pulei\Documents\GitHub\dugcraInzinerija\AlgorithmAnalysis\AlgorithmAnalysis\bin\Debug\AlgorithmAnalysis.exe
+C:\Users\pulei\Documents\GitHub\dugcraInzinerija\AlgorithmAnalysis\AlgorithmAnalysis\bin\Debug\AlgorithmAnalysis.pdb
