@@ -35,7 +35,7 @@ namespace AlgorithmAnalysis
             {
                 for (int y = 0; y < length; y++)
                 {
-                    Console.Write("{0}", (char)data[x, y].Data);
+                    Console.Write("{0}", data[x, y].Data);
                 }
                 Console.WriteLine();
             }
@@ -49,8 +49,8 @@ namespace AlgorithmAnalysis
         public void generateMapPrim()
         {
             algorithm = 1;
-            int wall = 35;
-            int ground = 32;
+            int wall = 0;
+            int ground = 1;
             //Generate double array with prim algorithm
             for (int x = 0; x < length; x++)
             {

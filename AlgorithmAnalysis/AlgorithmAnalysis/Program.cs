@@ -76,10 +76,10 @@ namespace AlgorithmAnalysis
         /// </summary>
         public static void Test_Recursive_Backtracing_Algorithm()
         {
-            MapClass mapArray = new MapClass(size);
-            Console.WriteLine("\n Double array generated with recursive backtracing algorithm \n");
-            mapArray.generateMapRecursiveBacktracing();
-            mapArray.print();
+            //MapClass mapArray = new MapClass(size);
+            //Console.WriteLine("\n Double array generated with recursive backtracing algorithm \n");
+            //mapArray.generateMapRecursiveBacktracing();
+            //mapArray.print();
 
 
         }
@@ -110,7 +110,9 @@ namespace AlgorithmAnalysis
         /// <param name="container"></param>
         public static void Analysis(MapsContainer container)
         {
-            Console.WriteLine("\n Prim's algorithm \n\n N       Runtime\n");
+            Process proc = Process.GetCurrentProcess();
+            double memory = 0;
+            Console.WriteLine("\n Prim's algorithm \n\n N       Runtime              RAM\n");
             Stopwatch myTimer = new Stopwatch();
             myTimer.Start();
             for (int i = 0; i < generatedMapNumber; i++)
@@ -120,11 +122,13 @@ namespace AlgorithmAnalysis
                 container.addMap(mapArray, 1);
             }
             myTimer.Stop();
-            Console.WriteLine(" {0}    {1}", generatedMapNumber, myTimer.Elapsed);
+            proc.Refresh();
+            memory = proc.PrivateMemorySize64 / 1000;
+            Console.WriteLine(" {0}    {1}     {2}B", generatedMapNumber, myTimer.Elapsed, memory);
             GC.Collect();
 
 
-            Console.WriteLine("\n Recursive backtracing algorithm \n\n N       Runtime\n");
+            Console.WriteLine("\n Recursive backtracing algorithm \n\n N       Runtime              RAM\n");
             myTimer.Reset();
             myTimer.Start();
             for (int i = 0; i < generatedMapNumber; i++)
@@ -134,11 +138,13 @@ namespace AlgorithmAnalysis
                 container.addMap(mapArray, 2);
             }
             myTimer.Stop();
-            Console.WriteLine(" {0}    {1}", generatedMapNumber, myTimer.Elapsed);
+            proc.Refresh();
+            memory = proc.PrivateMemorySize64 / 1000;
+            Console.WriteLine(" {0}    {1}     {2}B", generatedMapNumber, myTimer.Elapsed, memory);
             GC.Collect();
 
 
-            Console.WriteLine("\n Hunt and kill algorithm \n\n N       Runtime\n");
+            Console.WriteLine("\n Hunt and kill algorithm \n\n N       Runtime              RAM\n");
             myTimer.Reset();
             myTimer.Start();
             for (int i = 0; i < generatedMapNumber; i++)
@@ -148,7 +154,9 @@ namespace AlgorithmAnalysis
                 container.addMap(mapArray, 3);
             }
             myTimer.Stop();
-            Console.WriteLine(" {0}    {1}", generatedMapNumber, myTimer.Elapsed);
+            proc.Refresh();
+            memory = proc.PrivateMemorySize64 / 1000;
+            Console.WriteLine(" {0}    {1}     {2}B", generatedMapNumber, myTimer.Elapsed, memory);
             GC.Collect();
         }
     }
