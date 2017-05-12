@@ -6,7 +6,7 @@ namespace AlgorithmAnalysis
     class Program
     {
         public static int generatedMapNumber = 1000;    //Generated maps number
-        public static int size = 15;                    //Map array size
+        public static int size = 15;                    //Map array size. Pauliaus algoritmai su lyginiais skaiciais neveikia. Kol kas darom su nelyginiais
 
         static void Main(string[] args)
         {

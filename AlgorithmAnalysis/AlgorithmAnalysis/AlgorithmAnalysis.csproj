@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GrowingTree.cs" />
     <Compile Include="HuntAndKill.cs" />
     <Compile Include="MapClass.cs" />
     <Compile Include="MapsContainer.cs" />
