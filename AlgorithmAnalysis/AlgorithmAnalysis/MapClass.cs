@@ -6,6 +6,8 @@ namespace AlgorithmAnalysis
     public class MapClass
     {
         public Node[,] data;
+
+        public Node isStart;
         //Length of data array (one line). Length * Length = full length of the data array
         public int length;
 
@@ -35,7 +37,15 @@ namespace AlgorithmAnalysis
             {
                 for (int y = 0; y < length; y++)
                 {
-                    Console.Write("{0}", data[x, y].Data);
+                    if (!data[x, y].isStart)
+                    {
+                        Console.Write("{0}", data[x, y].Data);
+                    }
+                    else
+                    {
+                        Console.Write("#");
+                    }
+                    
                 }
                 Console.WriteLine();
             }
@@ -73,6 +83,8 @@ namespace AlgorithmAnalysis
             Random r = new Random();
             Node current = data[r.Next(0, length), r.Next(0, length)];
             current.Data = ground;
+            current.isStart = true;
+            isStart = current;
 
             List<Node> validNodes = new List<Node>();
 
@@ -159,6 +171,8 @@ namespace AlgorithmAnalysis
         public class Node
         {
             private int data;
+
+            public bool isStart;
 
             private Node up, right, down, left;
 

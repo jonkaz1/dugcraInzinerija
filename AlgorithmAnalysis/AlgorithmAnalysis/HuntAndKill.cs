@@ -13,8 +13,10 @@ namespace AlgorithmAnalysis
         public static int mapSize = 15;
         public static char direction = 'N';
         public static char huntDirecton = 'B';
+        public static WorldPos StartingPoint = new WorldPos();        
         public static char[][] grid = new char[mapSize][];
         public static char[] directions = new char[4];
+
         public static char[][] GenerateMap()
         {
             Random random = new Random();
@@ -41,6 +43,7 @@ namespace AlgorithmAnalysis
             x = RandomNumberOdd(1, mapSize - 1, random);
             y = RandomNumberOdd(1, mapSize - 1, random);
             grid[y][x] = '1';
+            StartingPoint = new WorldPos(x, y);
 
             bool hunting = true;
 
@@ -54,7 +57,6 @@ namespace AlgorithmAnalysis
                     if (Walk())
                     {
                     }
-
                 }
                 else
                 {
@@ -68,12 +70,8 @@ namespace AlgorithmAnalysis
                     {
                         hunting = false;
                     }
-
                 }
-
             }
-            
-
             return grid;
         }
         public static void refresh()
@@ -102,11 +100,8 @@ namespace AlgorithmAnalysis
                             grid[y][x] = '1';
                             return true;
                         }
-
                     }
-
                     break;
-
                 case 'S':
                     if ((y + 2 != mapSize))
                     {
@@ -117,11 +112,8 @@ namespace AlgorithmAnalysis
                             grid[y][x] = '1';
                             return true;
                         }
-
                     }
-
                     break;
-
                 case 'W':
                     if ((x - 2 != -1))
                     {
@@ -133,9 +125,7 @@ namespace AlgorithmAnalysis
 
                             return true;
                         }
-
                     }
-
                     break;
 
                 case 'N':
@@ -147,11 +137,8 @@ namespace AlgorithmAnalysis
                             grid[y + 1][x] = '1';
                             grid[y][x] = '1';
                             return true;
-
                         }
-
                     }
-
                     break;
             }
             return false;

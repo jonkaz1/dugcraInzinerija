@@ -1,12 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
+using System.Runtime.Serialization.Json;
 
 namespace AlgorithmAnalysis
 {
     class Program
     {
         public static int generatedMapNumber = 1000;    //Generated maps number
-        public static int size = 15;                    //Map array size. Pauliaus algoritmai su lyginiais skaiciais neveikia. Kol kas darom su nelyginiais
+        public static int size = 16;                    //Map array size. Pauliaus algoritmai su lyginiais skaiciais neveikia. Kol kas darom su nelyginiais
 
         static void Main(string[] args)
         {
@@ -36,15 +39,64 @@ namespace AlgorithmAnalysis
                         Test_HuntAndKill_Algorithm();
                         break;
                     case "4":
-                        Console.WriteLine(">3. Analysis");
+                        Console.WriteLine(">4. Analysis");
                         Analysis(container);
-                        break;
+                        break;                    
                     case "5":
+                        SaveMap();
+                        break;
+                    case "6":
                         exit = true;
                         break;
                 }
             } while (exit == false);
         }
+
+        public static void SaveMap()
+        {
+            char[][] mapArray = new char[size][];
+            mapArray = HuntAndKill.GenerateMap();
+
+            Save save = new Save();
+            List<Save.Tiles> t = new List<Save.Tiles>();
+            Save.Tiles tile;
+            for (int x = 0; x < mapArray.Length; x++)
+            {
+                for (int y = 0; y < mapArray.Length; y++)
+                {
+                    tile.tile = new GridTile();
+                    int num = (int)char.GetNumericValue(mapArray[x][y]);
+                    if (num == 1)
+                    {
+                        tile.tile.type = GridTile.TileTypes.Ground;
+                    }
+                    if (num == 0)
+                    {
+                        tile.tile.type = GridTile.TileTypes.Wall;
+                    }
+                    tile.pos = new WorldPos(x, y);
+                    if (HuntAndKill.StartingPoint.x == x && HuntAndKill.StartingPoint.y == y)
+                    {
+                        tile.tile.containedObject = GridTile.ContainedObject.StartingPoint;
+                    }
+                    t.Add(tile);
+                }
+            }
+            save.tiles = t.ToArray();
+
+            MemoryStream stream = new MemoryStream();
+            DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(Save));
+
+            ser.WriteObject(stream, save);
+            stream.Position = 0;
+            StreamReader sr = new StreamReader(stream);
+            FileStream file = new FileStream("0;0.json", FileMode.OpenOrCreate);
+            stream.WriteTo(file);
+            stream.Close();
+            file.Close();
+            Console.WriteLine("Saved!");
+        }
+
         /// <summary>
         /// User interface
         /// </summary>
@@ -55,7 +107,8 @@ namespace AlgorithmAnalysis
             Console.WriteLine(">2. Test recursive backtracing");
             Console.WriteLine(">3. Hunt&Kill");
             Console.WriteLine(">4. Analysis");
-            Console.WriteLine(">5. Exit \n");
+            Console.WriteLine(">5. Save Hunt&Kill");
+            Console.WriteLine(">6. Exit \n");
             Console.Write(">");
         }
 
