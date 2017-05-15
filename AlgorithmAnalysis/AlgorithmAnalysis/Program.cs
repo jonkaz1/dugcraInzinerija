@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.Serialization.Json;
+using System.Text;
 
 namespace AlgorithmAnalysis
 {
@@ -41,11 +42,14 @@ namespace AlgorithmAnalysis
                     case "4":
                         Console.WriteLine(">4. Analysis");
                         Analysis(container);
-                        break;                    
+                        break;
                     case "5":
                         SaveMap();
                         break;
                     case "6":
+                        Test_GenItems();
+                        break;
+                    case "7":
                         exit = true;
                         break;
                 }
@@ -57,16 +61,20 @@ namespace AlgorithmAnalysis
             char[][] mapArray = new char[size][];
             mapArray = HuntAndKill.GenerateMap();
 
+            GenerateItems(mapArray);
+
             Save save = new Save();
             List<Save.Tiles> t = new List<Save.Tiles>();
             Save.Tiles tile;
+
+            #region generate
             for (int x = 0; x < mapArray.Length; x++)
             {
                 for (int y = 0; y < mapArray.Length; y++)
                 {
                     tile.tile = new GridTile();
                     int num = (int)char.GetNumericValue(mapArray[x][y]);
-                    if (num == 1)
+                    if (num >= 1)
                     {
                         tile.tile.type = GridTile.TileTypes.Ground;
                     }
@@ -79,9 +87,31 @@ namespace AlgorithmAnalysis
                     {
                         tile.tile.containedObject = GridTile.ContainedObject.StartingPoint;
                     }
+                    else if (num == 2)
+                    {
+                        tile.tile.containedObject = GridTile.ContainedObject.Spear;
+                    }
+                    else if (num == 3)
+                    {
+                        tile.tile.containedObject = GridTile.ContainedObject.Ladder;
+                    }
+                    else if (num == 4)
+                    {
+                        tile.tile.containedObject = GridTile.ContainedObject.Enemy;
+                    }
+                    else if (num == 5)
+                    {
+                        tile.tile.containedObject = GridTile.ContainedObject.Pit;
+                    }
+                    else if (num == 6)
+                    {
+                        tile.tile.containedObject = GridTile.ContainedObject.Chest;
+                    }
                     t.Add(tile);
                 }
             }
+            #endregion
+
             save.tiles = t.ToArray();
 
             MemoryStream stream = new MemoryStream();
@@ -93,6 +123,10 @@ namespace AlgorithmAnalysis
             FileStream file = new FileStream("0;0.json", FileMode.OpenOrCreate);
             stream.WriteTo(file);
             stream.Close();
+            file.Close();
+            file = new FileStream("levelConfig.cfg", FileMode.OpenOrCreate);
+            string conf = "gridSize=" + HuntAndKill.mapSize;
+            file.Write(Encoding.UTF8.GetBytes(conf), 0, conf.Length);
             file.Close();
             Console.WriteLine("Saved!");
         }
@@ -108,7 +142,8 @@ namespace AlgorithmAnalysis
             Console.WriteLine(">3. Hunt&Kill");
             Console.WriteLine(">4. Analysis");
             Console.WriteLine(">5. Save Hunt&Kill");
-            Console.WriteLine(">6. Exit \n");
+            Console.WriteLine(">6. Gen items \n");
+            Console.WriteLine(">7. Exit \n");
             Console.Write(">");
         }
 
@@ -150,11 +185,35 @@ namespace AlgorithmAnalysis
             {
                 for (int j = 0; j < mapArray.Length; j++)
                 {
-                    Console.Write(mapArray[i][j]);
+                    if (HuntAndKill.StartingPoint.x == i && HuntAndKill.StartingPoint.y == j)
+                    {
+                        Console.Write("X");
+                    }
+                    else Console.Write(mapArray[i][j]);
                 }
                 Console.WriteLine();
             }
-    }
+        }
+
+        public static void Test_GenItems()
+        {
+            char[][] mapArray = new char[size][];
+            mapArray = HuntAndKill.GenerateMap();
+            GenerateItems(mapArray);
+
+            for (int i = 0; i < mapArray.Length; i++)
+            {
+                for (int j = 0; j < mapArray.Length; j++)
+                {
+                    if (HuntAndKill.StartingPoint.x == i && HuntAndKill.StartingPoint.y == j)
+                    {
+                        Console.Write("X");
+                    }
+                    else Console.Write(mapArray[i][j]);
+                }
+                Console.WriteLine();
+            }
+        }
 
 
         /// <summary>
@@ -211,6 +270,146 @@ namespace AlgorithmAnalysis
             memory = proc.PrivateMemorySize64 / 1000;
             Console.WriteLine(" {0}    {1}     {2}B", generatedMapNumber, myTimer.Elapsed, memory);
             GC.Collect();
+        }
+
+        public static void GenerateItems(char[][] mapArray)
+        {
+
+            List<TilePoint> validPos = new List<TilePoint>();
+
+            for (int x = 1; x < size - 1; x++)
+            {
+                for (int y = 1; y < HuntAndKill.mapSize - 1; y++)
+                {
+                    if (HuntAndKill.StartingPoint.x == x && HuntAndKill.StartingPoint.y == y)
+                    {
+                        mapArray[x][y] = 'X';
+                    }
+                    else if (mapArray[x][y] == '1')
+                    {
+                        if (mapArray[x - 1][y] == '0' && mapArray[x + 1][y] == '0')
+                        {
+                            if (mapArray[x][y + 1] == '0' || mapArray[x][y - 1] == '0')
+                            {
+                                TilePoint p = new TilePoint();
+                                p.pos = new WorldPos(x, y);
+
+                                if (mapArray[x][y + 1] == '0')
+                                {
+                                    p.next = new WorldPos(x, y - 1);
+                                }
+                                else
+                                {
+                                    p.next = new WorldPos(x, y + 1);
+                                }
+                                validPos.Add(p);
+                            }
+                        }
+                        else if (mapArray[x][y - 1] == '0' && mapArray[x][y + 1] == '0')
+                        {
+                            if (mapArray[x + 1][y] == '0' || mapArray[x - 1][y] == '0')
+                            {
+                                TilePoint p = new TilePoint();
+                                p.pos = new WorldPos(x, y);
+
+                                if (mapArray[x + 1][y] == '0')
+                                {
+                                    p.next = new WorldPos(x - 1, y);
+                                }
+                                else
+                                {
+                                    p.next = new WorldPos(x + 1, y);
+                                }
+                                validPos.Add(p);
+                            }
+                        }
+                    }
+                }
+            }
+
+            bool placedChest = false;
+            bool placedSpear = false; 
+            TilePoint point = new TilePoint();
+            Random rand = new Random();
+
+
+            if (validPos.Count == 1)
+            {
+                point = validPos[0];
+                mapArray[point.pos.x][point.pos.y] = '6';
+                validPos.RemoveAt(0);
+            }
+            else if (validPos.Count == 2)
+            {
+                int num = rand.Next(0, validPos.Count);
+                point = validPos[num];
+                mapArray[point.pos.x][point.pos.y] = '6';
+                mapArray[point.next.x][point.next.y] = '4';
+                validPos.RemoveAt(num);
+
+                point = validPos[0];
+                mapArray[point.pos.x][point.pos.y] = '2';
+                validPos.RemoveAt(0);
+            }
+            else if (validPos.Count == 3)
+            {
+                int num = rand.Next(0, validPos.Count);
+                point = validPos[num];
+                mapArray[point.pos.x][point.pos.y] = '6';
+                mapArray[point.next.x][point.next.y] = '4';
+                validPos.RemoveAt(num);
+
+                num = rand.Next(0, validPos.Count);
+                point = validPos[num];
+                mapArray[point.pos.x][point.pos.y] = '2';
+                mapArray[point.next.x][point.next.y] = '5';
+                validPos.RemoveAt(num);
+
+                point = validPos[0];
+                mapArray[point.pos.x][point.pos.y] = '3';
+                validPos.RemoveAt(0);
+            }
+
+            while (validPos.Count > 0)
+            {                
+                int num = rand.Next(0, validPos.Count);
+
+                if (validPos.Count == 1)
+                {
+                    point = validPos[num];
+                    mapArray[point.pos.x][point.pos.y] = '3';
+                }
+                else if (!placedChest)
+                {
+                    point = validPos[num];
+                    mapArray[point.pos.x][point.pos.y] = '6';
+                    mapArray[point.next.x][point.next.y] = '4';
+                    placedChest = true;
+                }
+                else
+                {
+                    if (!placedSpear)
+                    {
+                        point = validPos[num];
+                        mapArray[point.pos.x][point.pos.y] = '2';
+                        mapArray[point.next.x][point.next.y] = '5';
+                        placedSpear = true;
+                    }
+                    else
+                    {
+                        point = validPos[num];
+                        mapArray[point.pos.x][point.pos.y] = '3';
+                        mapArray[point.next.x][point.next.y] = '5';
+                    }
+                }
+                validPos.RemoveAt(num);
+            }
+        }
+
+        public struct TilePoint
+        {
+            public WorldPos pos;
+            public WorldPos next;
         }
     }
 }

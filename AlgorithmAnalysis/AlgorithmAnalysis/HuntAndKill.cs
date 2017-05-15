@@ -13,7 +13,7 @@ namespace AlgorithmAnalysis
         public static int mapSize = 15;
         public static char direction = 'N';
         public static char huntDirecton = 'B';
-        public static WorldPos StartingPoint = new WorldPos();        
+        public static WorldPos StartingPoint = new WorldPos();    
         public static char[][] grid = new char[mapSize][];
         public static char[] directions = new char[4];
 
