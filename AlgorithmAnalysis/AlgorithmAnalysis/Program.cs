@@ -9,7 +9,7 @@ namespace AlgorithmAnalysis
 {
     class Program
     {
-        public static int generatedMapNumber = 1000;    //Generated maps number
+        public static int generatedMapNumber = 10000;    //Generated maps number
         public static int size = 16;                    //Map array size. Pauliaus algoritmai su lyginiais skaiciais neveikia. Kol kas darom su nelyginiais
 
         static void Main(string[] args)
@@ -44,9 +44,11 @@ namespace AlgorithmAnalysis
                         Analysis(container);
                         break;
                     case "5":
+                        Console.WriteLine(">4. Save Map");
                         SaveMap();
                         break;
                     case "6":
+                        Console.WriteLine(">4. Test item generatio");
                         Test_GenItems();
                         break;
                     case "7":
@@ -139,10 +141,10 @@ namespace AlgorithmAnalysis
             Console.WriteLine("\n Menu map generating algorithms\n");
             Console.WriteLine(">1. Test Prim");
             Console.WriteLine(">2. Test recursive backtracing");
-            Console.WriteLine(">3. Hunt&Kill");
+            Console.WriteLine(">3. Test Hunt&Kill");
             Console.WriteLine(">4. Analysis");
             Console.WriteLine(">5. Save Hunt&Kill");
-            Console.WriteLine(">6. Gen items \n");
+            Console.WriteLine(">6. Generate items \n");
             Console.WriteLine(">7. Exit \n");
             Console.Write(">");
         }
@@ -262,7 +264,7 @@ namespace AlgorithmAnalysis
             for (int i = 0; i < generatedMapNumber; i++)
             {
                 MapClass mapArray = new MapClass(size);
-                mapArray.generateMapHuntAndKill();
+                mapArray.huntKillArray = HuntAndKill.GenerateMap();
                 container.addMap(mapArray, 3);
             }
             myTimer.Stop();

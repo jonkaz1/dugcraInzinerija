@@ -5,6 +5,8 @@ namespace AlgorithmAnalysis
 {
     public class MapClass
     {
+        public char[][] huntKillArray;
+
         public Node[,] data;
 
         public Node isStart;
@@ -18,6 +20,7 @@ namespace AlgorithmAnalysis
         {
             length = size;
             data = new Node[size, size];
+            huntKillArray = new char[size][];
         }
         public int getData(int x, int y)
         {
