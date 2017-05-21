@@ -60,76 +60,80 @@ namespace AlgorithmAnalysis
 
         public static void SaveMap()
         {
-            char[][] mapArray = new char[size][];
-            mapArray = HuntAndKill.GenerateMap();
-
-            GenerateItems(mapArray);
-
-            Save save = new Save();
-            List<Save.Tiles> t = new List<Save.Tiles>();
-            Save.Tiles tile;
-
-            #region generate
-            for (int x = 0; x < mapArray.Length; x++)
+            for (int i = 0; i < 10; i++)
             {
-                for (int y = 0; y < mapArray.Length; y++)
+
+                char[][] mapArray = new char[size][];
+
+                mapArray = HuntAndKill.GenerateMap();
+                GenerateItems(mapArray);
+
+                Save save = new Save();
+                List<Save.Tiles> t = new List<Save.Tiles>();
+                Save.Tiles tile;
+
+                #region generate
+                for (int x = 0; x < mapArray.Length; x++)
                 {
-                    tile.tile = new GridTile();
-                    int num = (int)char.GetNumericValue(mapArray[x][y]);
-                    if (num >= 1)
+                    for (int y = 0; y < mapArray.Length; y++)
                     {
-                        tile.tile.type = GridTile.TileTypes.Ground;
+                        tile.tile = new GridTile();
+                        int num = (int)char.GetNumericValue(mapArray[x][y]);
+                        if (num >= 1)
+                        {
+                            tile.tile.type = GridTile.TileTypes.Ground;
+                        }
+                        if (num == 0)
+                        {
+                            tile.tile.type = GridTile.TileTypes.Wall;
+                        }
+                        tile.pos = new WorldPos(x, y);
+                        if (HuntAndKill.StartingPoint.x == x && HuntAndKill.StartingPoint.y == y)
+                        {
+                            tile.tile.containedObject = GridTile.ContainedObject.StartingPoint;
+                        }
+                        else if (num == 2)
+                        {
+                            tile.tile.containedObject = GridTile.ContainedObject.Spear;
+                        }
+                        else if (num == 3)
+                        {
+                            tile.tile.containedObject = GridTile.ContainedObject.Ladder;
+                        }
+                        else if (num == 4)
+                        {
+                            tile.tile.containedObject = GridTile.ContainedObject.Enemy;
+                        }
+                        else if (num == 5)
+                        {
+                            tile.tile.containedObject = GridTile.ContainedObject.Pit;
+                        }
+                        else if (num == 6)
+                        {
+                            tile.tile.containedObject = GridTile.ContainedObject.Chest;
+                        }
+                        t.Add(tile);
                     }
-                    if (num == 0)
-                    {
-                        tile.tile.type = GridTile.TileTypes.Wall;
-                    }
-                    tile.pos = new WorldPos(x, y);
-                    if (HuntAndKill.StartingPoint.x == x && HuntAndKill.StartingPoint.y == y)
-                    {
-                        tile.tile.containedObject = GridTile.ContainedObject.StartingPoint;
-                    }
-                    else if (num == 2)
-                    {
-                        tile.tile.containedObject = GridTile.ContainedObject.Spear;
-                    }
-                    else if (num == 3)
-                    {
-                        tile.tile.containedObject = GridTile.ContainedObject.Ladder;
-                    }
-                    else if (num == 4)
-                    {
-                        tile.tile.containedObject = GridTile.ContainedObject.Enemy;
-                    }
-                    else if (num == 5)
-                    {
-                        tile.tile.containedObject = GridTile.ContainedObject.Pit;
-                    }
-                    else if (num == 6)
-                    {
-                        tile.tile.containedObject = GridTile.ContainedObject.Chest;
-                    }
-                    t.Add(tile);
                 }
+                #endregion
+
+                save.tiles = t.ToArray();
+
+                MemoryStream stream = new MemoryStream();
+                DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(Save));
+
+                ser.WriteObject(stream, save);
+                stream.Position = 0;
+                StreamReader sr = new StreamReader(stream);
+                FileStream file = new FileStream("maps\\"+i+";"+i+".json", FileMode.OpenOrCreate);
+                stream.WriteTo(file);
+                stream.Close();
+                file.Close();
+                file = new FileStream("levelConfig.cfg", FileMode.OpenOrCreate);
+                string conf = "gridSize=" + HuntAndKill.mapSize;
+                file.Write(Encoding.UTF8.GetBytes(conf), 0, conf.Length);
+                file.Close();
             }
-            #endregion
-
-            save.tiles = t.ToArray();
-
-            MemoryStream stream = new MemoryStream();
-            DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(Save));
-
-            ser.WriteObject(stream, save);
-            stream.Position = 0;
-            StreamReader sr = new StreamReader(stream);
-            FileStream file = new FileStream("0;0.json", FileMode.OpenOrCreate);
-            stream.WriteTo(file);
-            stream.Close();
-            file.Close();
-            file = new FileStream("levelConfig.cfg", FileMode.OpenOrCreate);
-            string conf = "gridSize=" + HuntAndKill.mapSize;
-            file.Write(Encoding.UTF8.GetBytes(conf), 0, conf.Length);
-            file.Close();
             Console.WriteLine("Saved!");
         }
 
