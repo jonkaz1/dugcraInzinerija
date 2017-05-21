@@ -47,7 +47,6 @@ namespace AlgorithmAnalysis
             y = RandomNumberOdd(1, 14, random);
             xs = x;
             ys = y;
-            Console.WriteLine(x + " + " + y);
             grid[y][x] = '1';
 
             bool creating = true;
@@ -75,7 +74,6 @@ namespace AlgorithmAnalysis
                 {
                     creating = false;
                 }
-                Console.Write(kazkoks);
 
             }
 
@@ -91,7 +89,6 @@ namespace AlgorithmAnalysis
                     x = x - 2;
                     grid[y][x + 1] = '1';
                     grid[y][x] = '1';
-                    Console.ReadKey();
                     break;
 
                 case 'S':
@@ -99,7 +96,6 @@ namespace AlgorithmAnalysis
                     y = y - 2;
                     grid[y + 1][x] = '1';
                     grid[y][x] = '1';
-                    Console.ReadKey();
                     break;
 
                 case 'W':
@@ -107,7 +103,6 @@ namespace AlgorithmAnalysis
                     x = x + 2;
                     grid[y][x - 1] = '1';
                     grid[y][x] = '1';
-                    Console.ReadKey();
                     break;
 
                 case 'N':
@@ -115,7 +110,6 @@ namespace AlgorithmAnalysis
                     y = y + 2;
                     grid[y - 1][x] = '1';
                     grid[y][x] = '1';
-                    Console.ReadKey();
                     break;
             }
         }
@@ -160,12 +154,9 @@ namespace AlgorithmAnalysis
                             x = x + 2;
                             grid[y][x - 1] = '1';
                             grid[y][x] = '1';
-                            Console.ReadKey();
                         }
 
                     }
-
-                    Console.WriteLine("Case East {0},{1}", y, x);
                     break;
 
                 case 'S':
@@ -185,11 +176,9 @@ namespace AlgorithmAnalysis
                             y = y + 2;
                             grid[y - 1][x] = '1';
                             grid[y][x] = '1';
-                            Console.ReadKey();
                         }
 
                     }
-                    Console.WriteLine("Case South {0},{1}", y, x);
                     break;
 
                 case 'W':
@@ -209,11 +198,9 @@ namespace AlgorithmAnalysis
                             x = x - 2;
                             grid[y][x + 1] = '1';
                             grid[y][x] = '1';
-                            Console.ReadKey();
                         }
 
                     }
-                    Console.WriteLine("Case West {0},{1}", y, x);
                     break;
 
                 case 'N':
@@ -233,11 +220,9 @@ namespace AlgorithmAnalysis
                             y = y - 2;
                             grid[y + 1][x] = '1';
                             grid[y][x] = '1';
-                            Console.ReadKey();
                         }
 
                     }
-                    Console.WriteLine("Case North {0},{1}", y, x);
                     break;
             }
         }

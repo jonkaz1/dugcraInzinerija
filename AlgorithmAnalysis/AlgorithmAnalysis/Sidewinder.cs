@@ -16,7 +16,7 @@ namespace AlgorithmAnalysis
         public static char[][] grid = new char[mapSize][];
         public static char[] directions = new char[4];
         public static Random random = new Random();
-
+        //starting pointo nera, jis kaip ir virsutine map'o dalis, kai y=1, x={1;size-1};
         public static char[][] GenerateMap()
         {
 
@@ -39,16 +39,7 @@ namespace AlgorithmAnalysis
             {
                 grid[1][j] = '1';
             }
-            //PIESIMAS
-            for (int i = 0; i < grid.Length; i++)
-            {
-                for (int j = 0; j < grid.Length; j++)
-                {
 
-                    Console.Write(grid[i][j]);
-                }
-                Console.WriteLine();
-            }
             //---------------------------
 
             bool creating = true;
