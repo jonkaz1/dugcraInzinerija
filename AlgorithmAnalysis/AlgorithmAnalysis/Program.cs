@@ -12,7 +12,8 @@ namespace AlgorithmAnalysis
         public static int generatedMapNumber = 1000;     //Generated maps number
         public static int testTimes = 10;
         public static double lastMemory;
-        public static int runningTime = 1000*10;
+        public static double availableMemory;
+        public static int runningTime = 1000*100;
         public static int size = 16;                    //Map array size. Pauliaus algoritmai su lyginiais skaiciais neveikia. Kol kas darom su nelyginiais
 
         static void Main(string[] args)
@@ -233,6 +234,7 @@ namespace AlgorithmAnalysis
         {
 
             Process proc = Process.GetCurrentProcess();
+            availableMemory = (new Microsoft.VisualBasic.Devices.ComputerInfo().AvailablePhysicalMemory) * 0.7;
             double memory = 0;
             Console.WriteLine("\n Prim's algorithm \n\n N        Runtime              RAM\n");
 
@@ -254,11 +256,16 @@ namespace AlgorithmAnalysis
                 proc.Refresh();
                 memory = (proc.PrivateMemorySize64 / 1000) - lastMemory;
                 Console.WriteLine(" {0,-5}    {1}     {2}B", generatedMapNumber * j, myTimer.Elapsed, memory);
-                //myTimer.Reset();
+                myTimer.Reset();
                 allTime = myTimer;
                 if (allTime.ElapsedMilliseconds > runningTime)
                 {
                     Console.WriteLine("\nError: Program ran too long: {0}", allTime.Elapsed);
+                    return;
+                }
+                if (proc.PrivateMemorySize64 >= availableMemory)
+                {
+                    Console.WriteLine("\nError: Program used too much RAM: {0}MB", proc.PrivateMemorySize64 / 1000000);
                     return;
                 }
                 GC.Collect();
@@ -285,6 +292,11 @@ namespace AlgorithmAnalysis
                     Console.WriteLine("\nError: Program ran too long: {0}", allTime.Elapsed);
                     return;
                 }
+                if (proc.PrivateMemorySize64 >= availableMemory)
+                {
+                    Console.WriteLine("\nError: Program used too much RAM: {0}MB", proc.PrivateMemorySize64 / 1000000);
+                    return;
+                }
                 GC.Collect();
             }
             lastMemory += memory;
@@ -307,6 +319,11 @@ namespace AlgorithmAnalysis
                 if (allTime.ElapsedMilliseconds > runningTime)
                 {
                     Console.WriteLine("\nError: Program ran too long: {0}", allTime.Elapsed);
+                    return;
+                }
+                if (proc.PrivateMemorySize64 >= availableMemory)
+                {
+                    Console.WriteLine("\nError: Program used too much RAM: {0}MB", proc.PrivateMemorySize64 / 1000000);
                     return;
                 }
                 GC.Collect();
