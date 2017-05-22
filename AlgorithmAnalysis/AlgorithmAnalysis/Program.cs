@@ -9,7 +9,9 @@ namespace AlgorithmAnalysis
 {
     class Program
     {
-        public static int generatedMapNumber = 10000;    //Generated maps number
+        public static int generatedMapNumber = 100;     //Generated maps number
+        public static int testTimes = 10;
+        public static double lastMemory;
         public static int size = 16;                    //Map array size. Pauliaus algoritmai su lyginiais skaiciais neveikia. Kol kas darom su nelyginiais
 
         static void Main(string[] args)
@@ -228,54 +230,68 @@ namespace AlgorithmAnalysis
         /// <param name="container"></param>
         public static void Analysis(MapsContainer container)
         {
+
             Process proc = Process.GetCurrentProcess();
             double memory = 0;
-            Console.WriteLine("\n Prim's algorithm \n\n N       Runtime              RAM\n");
-            Stopwatch myTimer = new Stopwatch();
-            myTimer.Start();
-            for (int i = 0; i < generatedMapNumber; i++)
-            {
-                MapClass mapArray = new MapClass(size);
-                mapArray.generateMapPrim();
-                container.addMap(mapArray, 1);
-            }
-            myTimer.Stop();
-            proc.Refresh();
-            memory = proc.PrivateMemorySize64 / 1000;
-            Console.WriteLine(" {0}    {1}     {2}B", generatedMapNumber, myTimer.Elapsed, memory);
-            GC.Collect();
+            Console.WriteLine("\n Prim's algorithm \n\n N        Runtime              RAM\n");
 
+            Stopwatch myTimer = new Stopwatch();
+
+            lastMemory = proc.PrivateMemorySize64 / 1000;
+            for (int j = 1; j <= testTimes; j++)
+            {
+                myTimer.Start();
+                for (int i = 0; i < generatedMapNumber * j; i++)
+                {
+                    MapClass mapArray = new MapClass(size);
+                    mapArray.generateMapPrim();
+                    container.addMap(mapArray, 1);
+                }
+                myTimer.Stop();
+                proc.Refresh();
+                memory = (proc.PrivateMemorySize64 / 1000) - lastMemory;
+                Console.WriteLine(" {0,-5}    {1}     {2}B", generatedMapNumber * j, myTimer.Elapsed, memory);
+                myTimer.Reset();
+                GC.Collect();
+            }
+            lastMemory += memory;
 
             Console.WriteLine("\n Recursive backtracing algorithm \n\n N       Runtime              RAM\n");
-            myTimer.Reset();
-            myTimer.Start();
-            for (int i = 0; i < generatedMapNumber; i++)
+            for (int j = 1; j <= testTimes; j++)
             {
-                MapClass mapArray = new MapClass(size);
-                mapArray.generateMapRecursiveBacktracing();
-                container.addMap(mapArray, 2);
+                myTimer.Start();
+                for (int i = 0; i < generatedMapNumber *j; i++)
+                {
+                    MapClass mapArray = new MapClass(size);
+                    mapArray.generateMapRecursiveBacktracing();
+                    container.addMap(mapArray, 2);
+                }
+                myTimer.Stop();
+                proc.Refresh();
+                memory = (proc.PrivateMemorySize64 / 1000) - lastMemory;
+                Console.WriteLine(" {0,-5}    {1}     {2}B", generatedMapNumber *j, myTimer.Elapsed, memory);
+                myTimer.Reset();
+                GC.Collect();
             }
-            myTimer.Stop();
-            proc.Refresh();
-            memory = proc.PrivateMemorySize64 / 1000;
-            Console.WriteLine(" {0}    {1}     {2}B", generatedMapNumber, myTimer.Elapsed, memory);
-            GC.Collect();
-
+            lastMemory += memory;
 
             Console.WriteLine("\n Hunt and kill algorithm \n\n N       Runtime              RAM\n");
-            myTimer.Reset();
-            myTimer.Start();
-            for (int i = 0; i < generatedMapNumber; i++)
+            for (int j = 1; j <= testTimes; j++)
             {
-                MapClass mapArray = new MapClass(size);
-                mapArray.huntKillArray = HuntAndKill.GenerateMap();
-                container.addMap(mapArray, 3);
+                myTimer.Start();
+                for (int i = 0; i < generatedMapNumber * j; i++)
+                {
+                    MapClass mapArray = new MapClass(size);
+                    mapArray.huntKillArray = HuntAndKill.GenerateMap();
+                    container.addMap(mapArray, 3);
+                }
+                myTimer.Stop();
+                proc.Refresh();
+                memory = (proc.PrivateMemorySize64 / 1000) - lastMemory;
+                Console.WriteLine(" {0, -5}    {1}     {2}B", generatedMapNumber * j, myTimer.Elapsed, memory);
+                myTimer.Reset();
+                GC.Collect();
             }
-            myTimer.Stop();
-            proc.Refresh();
-            memory = proc.PrivateMemorySize64 / 1000;
-            Console.WriteLine(" {0}    {1}     {2}B", generatedMapNumber, myTimer.Elapsed, memory);
-            GC.Collect();
         }
 
         public static void GenerateItems(char[][] mapArray)
