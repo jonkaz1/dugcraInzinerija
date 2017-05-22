@@ -11,9 +11,10 @@ namespace AlgorithmAnalysis
     {
         public static int generatedMapNumber = 1000;     //Generated maps number
         public static int testTimes = 10;
+        public static int NoGo;
         public static double lastMemory;
         public static double availableMemory;
-        public static int runningTime = 1000*100;
+        public static int runningTime = 1000*120;
         public static int size = 16;                    //Map array size. Pauliaus algoritmai su lyginiais skaiciais neveikia. Kol kas darom su nelyginiais
 
         static void Main(string[] args)
@@ -32,30 +33,34 @@ namespace AlgorithmAnalysis
                 switch (cki.KeyChar.ToString())
                 {
                     case "1":
-                        Console.WriteLine(">1. Test ");
+                        Console.WriteLine(">1. Test Prim");
                         Test_Prim_Algorithm();
                         break;
                     case "2":
-                        Console.WriteLine(">2. Test ");
-                        Test_Recursive_Backtracing_Algorithm();
+                        Console.WriteLine(">2. Test GrowingTree");
+
                         break;
                     case "3":
-                        Console.WriteLine(">3. Test ");
+                        Console.WriteLine(">3. Test Hunt&Kill");
                         Test_HuntAndKill_Algorithm();
                         break;
                     case "4":
-                        Console.WriteLine(">4. Analysis");
-                        Analysis(container);
+                        Console.WriteLine(">4. Test Sidewinder");
+
                         break;
                     case "5":
-                        Console.WriteLine(">4. Save Map");
-                        SaveMap();
-                        break;
-                    case "6":
-                        Console.WriteLine(">4. Test item generatio");
+                        Console.WriteLine(">5. Test generated items");
                         Test_GenItems();
                         break;
+                    case "6":
+                        Console.WriteLine(">6. Analysis");
+                        Analysis(container);
+                        break;
                     case "7":
+                        Console.WriteLine(">7. Save generated maps\n");
+                        SaveMap();
+                        break;
+                    case "8":
                         exit = true;
                         break;
                 }
@@ -148,12 +153,13 @@ namespace AlgorithmAnalysis
         {
             Console.WriteLine("\n Menu map generating algorithms\n");
             Console.WriteLine(">1. Test Prim");
-            Console.WriteLine(">2. Test recursive backtracing");
+            Console.WriteLine(">2. Test GrowingTree");
             Console.WriteLine(">3. Test Hunt&Kill");
-            Console.WriteLine(">4. Analysis");
-            Console.WriteLine(">5. Save Hunt&Kill");
-            Console.WriteLine(">6. Generate items \n");
-            Console.WriteLine(">7. Exit \n");
+            Console.WriteLine(">4. Test Sidewinder");
+            Console.WriteLine(">5. Test generated items");
+            Console.WriteLine(">6. Analysis");
+            Console.WriteLine(">7. Save generated maps");
+            Console.WriteLine(">8. Exit \n");
             Console.Write(">");
         }
 
@@ -232,9 +238,47 @@ namespace AlgorithmAnalysis
         /// <param name="container"></param>
         public static void Analysis(MapsContainer container)
         {
+            Console.Write("Enter integer number for map size: ");
+            string consoleSize = Console.ReadLine();
+            while (!int.TryParse(consoleSize, out size))
+            {
+                Console.WriteLine("\nError: Invalid map size.\n");
+                Console.WriteLine("Enter valid integer number for map size.");
+                Console.WriteLine("Enter \"exit\" to go back to the main menu.");
+                Console.Write("\n >> ");
+                consoleSize = Console.ReadLine();
+                if (consoleSize.ToLower().Trim() == "exit")
+                {
+                    return;
+                }
+            }
 
+            if (size < 5)
+            {
+                Console.WriteLine("\nError: Too small map size: {0}", size);
+                Console.WriteLine("Enter valid integer number for map size.");
+                Console.WriteLine("Enter \"exit\" to go back to the main menu.");
+                Console.Write("\n >> ");
+                consoleSize = Console.ReadLine();
+                if (consoleSize.ToLower().Trim() == "exit")
+                {
+                    return;
+                }
+                while (!int.TryParse(consoleSize, out size))
+                {
+                    Console.WriteLine("\nError: Invalid map size.\n");
+                    Console.WriteLine("Enter valid integer number for map size.");
+                    Console.WriteLine("Enter \"exit\" to go back to the main menu.");
+                    Console.Write("\n >> ");
+                    consoleSize = Console.ReadLine();
+                    if (consoleSize.ToLower().Trim() == "exit")
+                    {
+                        return;
+                    }
+                }
+            }
             Process proc = Process.GetCurrentProcess();
-            availableMemory = (new Microsoft.VisualBasic.Devices.ComputerInfo().AvailablePhysicalMemory) * 0.7;
+            availableMemory = 1800000000;// (new Microsoft.VisualBasic.Devices.ComputerInfo().AvailablePhysicalMemory) * 0.7;
             double memory = 0;
             Console.WriteLine("\n Prim's algorithm \n\n N        Runtime              RAM\n");
 
@@ -251,6 +295,15 @@ namespace AlgorithmAnalysis
                     MapClass mapArray = new MapClass(size);
                     mapArray.generateMapPrim();
                     container.addMap(mapArray, 1);
+
+                    if (i % 10 == 0)
+                    {
+                        if (proc.PrivateMemorySize64 >= availableMemory)
+                        {
+                            Console.WriteLine("\nError: Program used too much RAM: {0}MB {1}MB", proc.PrivateMemorySize64 / 1000000, availableMemory / 1000000);
+                            return;
+                        }
+                    }
                 }
                 myTimer.Stop();
                 proc.Refresh();
@@ -272,7 +325,7 @@ namespace AlgorithmAnalysis
             }
             lastMemory += memory;
 
-            Console.WriteLine("\n Recursive backtracing algorithm \n\n N       Runtime              RAM\n");
+            Console.WriteLine("\n GrowingTree algorithm \n\n N       Runtime              RAM\n");
             for (int j = 1; j <= testTimes; j++)
             {
                 myTimer.Start();
@@ -432,6 +485,144 @@ namespace AlgorithmAnalysis
 
             while (validPos.Count > 0)
             {                
+                int num = rand.Next(0, validPos.Count);
+
+                if (validPos.Count == 1)
+                {
+                    point = validPos[num];
+                    mapArray[point.pos.x][point.pos.y] = '3';
+                }
+                else if (!placedChest)
+                {
+                    point = validPos[num];
+                    mapArray[point.pos.x][point.pos.y] = '6';
+                    mapArray[point.next.x][point.next.y] = '4';
+                    placedChest = true;
+                }
+                else
+                {
+                    if (!placedSpear)
+                    {
+                        point = validPos[num];
+                        mapArray[point.pos.x][point.pos.y] = '2';
+                        mapArray[point.next.x][point.next.y] = '5';
+                        placedSpear = true;
+                    }
+                    else
+                    {
+                        point = validPos[num];
+                        mapArray[point.pos.x][point.pos.y] = '3';
+                        mapArray[point.next.x][point.next.y] = '5';
+                    }
+                }
+                validPos.RemoveAt(num);
+            }
+        }
+
+        public static void findNoGO(char[][] mapArray)
+        {
+
+            List<TilePoint> validPos = new List<TilePoint>();
+
+            for (int x = 1; x < size - 1; x++)
+            {
+                for (int y = 1; y < HuntAndKill.mapSize - 1; y++)
+                {
+                    if (HuntAndKill.StartingPoint.x == x && HuntAndKill.StartingPoint.y == y)
+                    {
+                        mapArray[x][y] = 'X';
+                    }
+                    else if (mapArray[x][y] == '1')
+                    {
+                        if (mapArray[x - 1][y] == '0' && mapArray[x + 1][y] == '0')
+                        {
+                            if (mapArray[x][y + 1] == '0' || mapArray[x][y - 1] == '0')
+                            {
+                                TilePoint p = new TilePoint();
+                                p.pos = new WorldPos(x, y);
+
+                                if (mapArray[x][y + 1] == '0')
+                                {
+                                    NoGo++;
+                                    p.next = new WorldPos(x, y - 1);
+                                }
+                                else
+                                {
+                                    NoGo++;
+                                    p.next = new WorldPos(x, y + 1);
+                                }
+                                validPos.Add(p);
+                            }
+                        }
+                        else if (mapArray[x][y - 1] == '0' && mapArray[x][y + 1] == '0')
+                        {
+                            if (mapArray[x + 1][y] == '0' || mapArray[x - 1][y] == '0')
+                            {
+                                TilePoint p = new TilePoint();
+                                p.pos = new WorldPos(x, y);
+
+                                if (mapArray[x + 1][y] == '0')
+                                {
+                                    NoGo++;
+                                    p.next = new WorldPos(x - 1, y);
+                                }
+                                else
+                                {
+                                    NoGo++;
+                                    p.next = new WorldPos(x + 1, y);
+                                }
+                                validPos.Add(p);
+                            }
+                        }
+                    }
+                }
+            }
+
+            bool placedChest = false;
+            bool placedSpear = false;
+            TilePoint point = new TilePoint();
+            Random rand = new Random();
+
+
+            if (validPos.Count == 1)
+            {
+                point = validPos[0];
+                mapArray[point.pos.x][point.pos.y] = '6';
+                validPos.RemoveAt(0);
+            }
+            else if (validPos.Count == 2)
+            {
+                int num = rand.Next(0, validPos.Count);
+                point = validPos[num];
+                mapArray[point.pos.x][point.pos.y] = '6';
+                mapArray[point.next.x][point.next.y] = '4';
+                validPos.RemoveAt(num);
+
+                point = validPos[0];
+                mapArray[point.pos.x][point.pos.y] = '2';
+                validPos.RemoveAt(0);
+            }
+            else if (validPos.Count == 3)
+            {
+                int num = rand.Next(0, validPos.Count);
+                point = validPos[num];
+                mapArray[point.pos.x][point.pos.y] = '6';
+                mapArray[point.next.x][point.next.y] = '4';
+                validPos.RemoveAt(num);
+
+                num = rand.Next(0, validPos.Count);
+                point = validPos[num];
+                mapArray[point.pos.x][point.pos.y] = '2';
+                mapArray[point.next.x][point.next.y] = '5';
+                validPos.RemoveAt(num);
+
+                point = validPos[0];
+                mapArray[point.pos.x][point.pos.y] = '3';
+                validPos.RemoveAt(0);
+            }
+
+            while (validPos.Count > 0)
+            {
                 int num = rand.Next(0, validPos.Count);
 
                 if (validPos.Count == 1)
