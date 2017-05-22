@@ -9,9 +9,10 @@ namespace AlgorithmAnalysis
 {
     class Program
     {
-        public static int generatedMapNumber = 100;     //Generated maps number
+        public static int generatedMapNumber = 1000;     //Generated maps number
         public static int testTimes = 10;
         public static double lastMemory;
+        public static int runningTime = 1000*10;
         public static int size = 16;                    //Map array size. Pauliaus algoritmai su lyginiais skaiciais neveikia. Kol kas darom su nelyginiais
 
         static void Main(string[] args)
@@ -236,7 +237,9 @@ namespace AlgorithmAnalysis
             Console.WriteLine("\n Prim's algorithm \n\n N        Runtime              RAM\n");
 
             Stopwatch myTimer = new Stopwatch();
+            Stopwatch allTime = new Stopwatch();
 
+            allTime.Start();
             lastMemory = proc.PrivateMemorySize64 / 1000;
             for (int j = 1; j <= testTimes; j++)
             {
@@ -251,7 +254,13 @@ namespace AlgorithmAnalysis
                 proc.Refresh();
                 memory = (proc.PrivateMemorySize64 / 1000) - lastMemory;
                 Console.WriteLine(" {0,-5}    {1}     {2}B", generatedMapNumber * j, myTimer.Elapsed, memory);
-                myTimer.Reset();
+                //myTimer.Reset();
+                allTime = myTimer;
+                if (allTime.ElapsedMilliseconds > runningTime)
+                {
+                    Console.WriteLine("\nError: Program ran too long: {0}", allTime.Elapsed);
+                    return;
+                }
                 GC.Collect();
             }
             lastMemory += memory;
@@ -271,6 +280,11 @@ namespace AlgorithmAnalysis
                 memory = (proc.PrivateMemorySize64 / 1000) - lastMemory;
                 Console.WriteLine(" {0,-5}    {1}     {2}B", generatedMapNumber *j, myTimer.Elapsed, memory);
                 myTimer.Reset();
+                if (allTime.ElapsedMilliseconds > runningTime)
+                {
+                    Console.WriteLine("\nError: Program ran too long: {0}", allTime.Elapsed);
+                    return;
+                }
                 GC.Collect();
             }
             lastMemory += memory;
@@ -290,8 +304,15 @@ namespace AlgorithmAnalysis
                 memory = (proc.PrivateMemorySize64 / 1000) - lastMemory;
                 Console.WriteLine(" {0, -5}    {1}     {2}B", generatedMapNumber * j, myTimer.Elapsed, memory);
                 myTimer.Reset();
+                if (allTime.ElapsedMilliseconds > runningTime)
+                {
+                    Console.WriteLine("\nError: Program ran too long: {0}", allTime.Elapsed);
+                    return;
+                }
                 GC.Collect();
             }
+            allTime.Stop();
+            GC.Collect();
         }
 
         public static void GenerateItems(char[][] mapArray)
