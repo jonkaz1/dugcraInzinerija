@@ -21,52 +21,273 @@ namespace AlgorithmAnalysis
         {
             MapsContainer container = new MapsContainer();
 
+            //ConsoleKeyInfo cki;
+            //bool exit = false;
+            //do
+            //{
+            //    DisplayMenu();
+            //    cki = Console.ReadKey();
+            //    Console.Clear();
+            //    Console.WriteLine("0 - wall\n1 - ground\n2 - ground spear\n3 - ground ladder\n" +
+            //    "4 - ground enemy\n5 - ground pit\n6 - ground treasure\n");
+            //    switch (cki.KeyChar.ToString())
+            //    {
+            //        case "1":
+            //            Console.WriteLine(">1. Test Prim");
+            //            Test_Prim_Algorithm();
+            //            break;
+            //        case "2":
+            //            Console.WriteLine(">2. Test GrowingTree");
+
+            //            break;
+            //        case "3":
+            //            Console.WriteLine(">3. Test Hunt&Kill");
+            //            Test_HuntAndKill_Algorithm();
+            //            break;
+            //        case "4":
+            //            Console.WriteLine(">4. Test Sidewinder");
+
+            //            break;
+            //        case "5":
+            //            Console.WriteLine(">5. Test generated items");
+            //            Test_GenItems();
+            //            break;
+            //        case "6":
+            //            Console.WriteLine(">6. Analysis");
+            //            Analysis(container);
+            //            break;
+            //        case "7":
+            //            Console.WriteLine(">7. Save generated maps\n");
+            //            SaveMap();
+            //            break;
+            //        case "8":
+            //            exit = true;
+            //            break;
+            //    }
+            //} while (exit == false);
+            MainMenu();
+        }
+        //Menu
+        //algoritmo skaicius: 1 primo 2 growing tree 3 hunt n kill 4 sidewinder
+        public static void MainMenu()
+        {
             ConsoleKeyInfo cki;
             bool exit = false;
             do
             {
-                DisplayMenu();
+                DisplayMenu(1);
                 cki = Console.ReadKey();
                 Console.Clear();
-                Console.WriteLine("0 - wall\n1 - ground\n2 - ground spear\n3 - ground ladder\n" +
-                "4 - ground enemy\n5 - ground pit\n6 - ground treasure\n");
                 switch (cki.KeyChar.ToString())
                 {
                     case "1":
-                        Console.WriteLine(">1. Test Prim");
-                        Test_Prim_Algorithm();
+                        Console.WriteLine(">1. Prim's");
+                        SecondMenu(1);
                         break;
                     case "2":
-                        Console.WriteLine(">2. Test GrowingTree");
-
+                        Console.WriteLine(">2. Growing Tree");
+                        SecondMenu(2);
                         break;
                     case "3":
-                        Console.WriteLine(">3. Test Hunt&Kill");
-                        Test_HuntAndKill_Algorithm();
+                        Console.WriteLine(">3. Hunt&Kill");
+                        SecondMenu(3);
                         break;
                     case "4":
-                        Console.WriteLine(">4. Test Sidewinder");
-
+                        Console.WriteLine(">4. Sidewinder");
+                        SecondMenu(4);
                         break;
                     case "5":
-                        Console.WriteLine(">5. Test generated items");
-                        Test_GenItems();
+                        Console.WriteLine(">5. All algorithms");
+                        SecondMenu(5);
                         break;
                     case "6":
-                        Console.WriteLine(">6. Analysis");
-                        Analysis(container);
+                        exit = true;
                         break;
-                    case "7":
-                        Console.WriteLine(">7. Save generated maps\n");
-                        SaveMap();
+                }
+            } while (exit == false);
+        }
+        public static void SecondMenu(int algorithm)
+        {
+            ConsoleKeyInfo cki;
+            bool exit = false;
+            do
+            {
+                DisplayMenu(2);
+                cki = Console.ReadKey();
+                Console.Clear();
+                switch (cki.KeyChar.ToString())
+                {
+                    case "1":
+                        Console.WriteLine(">1. Compare");
+                        CompareMenu(algorithm);
                         break;
-                    case "8":
+                    case "2":
+                        Console.WriteLine(">2. Portray");
+                        Portray(algorithm);
+                        break;
+                    case "3":
+                        Console.WriteLine(">3. Save");
+                        SaveAlgorithm(algorithm);
+                        break;
+                    case "4":
+                        MainMenu();
+                        break;
+                    case "5":
+                        exit = true;
+                        break;
+                }
+            } while (exit == false);
+
+        }
+        public static void CompareMenu(int algorithm)
+        {
+            ConsoleKeyInfo cki;
+            bool exit = false;
+            do
+            {
+                DisplayMenu(3);
+                cki = Console.ReadKey();
+                Console.Clear();
+                switch (cki.KeyChar.ToString())
+                {
+                    case "1":
+                        Console.WriteLine(">1. Ram analysis");
+                        RamTest(algorithm);
+                        break;
+                    case "2":
+                        Console.WriteLine(">2. Time analysis");
+                        TimeTest(algorithm);
+                        break;
+                    case "3":
+                        Console.WriteLine(">3. analysis");
+                        ComplexityTest(algorithm);
+                        break;
+                    case "4":
+                        MainMenu();
+                        break;
+                    case "5":
                         exit = true;
                         break;
                 }
             } while (exit == false);
         }
 
+        //Funkcijos
+        public static void Portray(int algorithm)
+        {
+            switch (algorithm)
+            {
+                //primo
+                case 1:
+                    MapClass mapArray = new MapClass(size);
+                    Console.WriteLine("\n Double array generated with Prim's algorithm \n");
+                    mapArray.generateMapPrim();
+                    mapArray.print();
+                    break;
+                case 2:
+
+                    break;
+                case 3:
+
+                    break;
+                case 4:
+
+                    break;
+                case 5:
+
+                    break;
+            }
+        }
+        public static void TimeTest(int algorithm)
+        {
+            switch (algorithm)
+            {
+                //primo
+                case 1:
+
+                    break;
+                case 2:
+
+                    break;
+                case 3:
+
+                    break;
+                case 4:
+
+                    break;
+                case 5:
+
+                    break;
+            }
+        }
+        public static void SaveAlgorithm(int algorithm)
+        {
+            switch (algorithm)
+            {
+                //primo
+                case 1:
+
+                    break;
+                case 2:
+
+                    break;
+                case 3:
+
+                    break;
+                case 4:
+
+                    break;
+                case 5:
+
+                    break;
+            }
+        }
+        public static void RamTest(int algorithm)
+        {
+            switch (algorithm)
+            {
+                //primo
+                case 1:
+
+                    break;
+                case 2:
+
+                    break;
+                case 3:
+
+                    break;
+                case 4:
+
+                    break;
+                case 5:
+
+                    break;
+            }
+        }
+        public static void ComplexityTest(int algorithm)
+        {
+            switch (algorithm)
+            {
+                //primo
+                case 1:
+
+                    break;
+                case 2:
+
+                    break;
+                case 3:
+
+                    break;
+                case 4:
+
+                    break;
+                case 5:
+
+                    break;
+            }
+        }
+        
+        //----------------------------------------------------------------------------------------------------------
         public static void SaveMap()
         {
             for (int i = 0; i < 10; i++)
@@ -146,47 +367,45 @@ namespace AlgorithmAnalysis
             Console.WriteLine("Saved!");
         }
 
-        /// <summary>
-        /// User interface
-        /// </summary>
-        static public void DisplayMenu()
+        static public void DisplayMenu(int n)
         {
-            Console.WriteLine("\n Menu map generating algorithms\n");
-            Console.WriteLine(">1. Test Prim");
-            Console.WriteLine(">2. Test GrowingTree");
-            Console.WriteLine(">3. Test Hunt&Kill");
-            Console.WriteLine(">4. Test Sidewinder");
-            Console.WriteLine(">5. Test generated items");
-            Console.WriteLine(">6. Analysis");
-            Console.WriteLine(">7. Save generated maps");
-            Console.WriteLine(">8. Exit \n");
-            Console.Write(">");
+            switch(n)
+            {
+                case 1:
+                    Console.WriteLine("Main Menu\n");
+                    Console.WriteLine(" Choose an algorithm\n");
+                    Console.WriteLine(">1. Prim's");
+                    Console.WriteLine(">2. Growing Tree");
+                    Console.WriteLine(">3. Hunt&Kill");
+                    Console.WriteLine(">4. Sidewinder");
+                    Console.WriteLine(">5. All algorithms");
+                    Console.WriteLine(">6. Exit \n");
+                    Console.Write(">");
+                    break;
+                case 2:
+                    Console.WriteLine("\n Choose an option\n");
+                    Console.WriteLine(">1. Compare");
+                    Console.WriteLine(">2. Portray");
+                    Console.WriteLine(">3. Save");
+                    Console.WriteLine(">4. Main menu");
+                    Console.WriteLine(">5. Exit \n");
+                    Console.Write(">");
+                    break;
+                case 3:
+                    Console.WriteLine("\n Compare by\n");
+                    Console.WriteLine(">1. Ram");
+                    Console.WriteLine(">2. Time");
+                    Console.WriteLine(">3. Complexity");
+                    Console.WriteLine(">4. Main Menu");
+                    Console.WriteLine(">5. Exit \n");
+                    Console.Write(">");
+                    break;
+            }
+
         }
 
-        /// <summary>
-        /// Prim's algorithm test
-        /// </summary>
-        public static void Test_Prim_Algorithm()
-        {
-            MapClass mapArray = new MapClass(size);
-            Console.WriteLine("\n Double array generated with Prim's algorithm \n");
-            mapArray.generateMapPrim();
-            mapArray.print();
 
 
-        }
-        /// <summary>
-        /// Recursive backtracing algorithm test
-        /// </summary>
-        public static void Test_Recursive_Backtracing_Algorithm()
-        {
-            //MapClass mapArray = new MapClass(size);
-            //Console.WriteLine("\n Double array generated with recursive backtracing algorithm \n");
-            //mapArray.generateMapRecursiveBacktracing();
-            //mapArray.print();
-
-
-        }
         /// <summary>
         /// Hunt and kill algorithm test
         /// </summary>
