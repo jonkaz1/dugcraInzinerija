@@ -17,10 +17,10 @@ namespace AlgorithmAnalysis
         public static int runningTime = 1000*120;
         public static int size = 16;                    //Map array size. Pauliaus algoritmai su lyginiais skaiciais neveikia. Kol kas darom su nelyginiais
 
+        static MapsContainer container = new MapsContainer();
+
         static void Main(string[] args)
         {
-            MapsContainer container = new MapsContainer();
-
             //ConsoleKeyInfo cki;
             //bool exit = false;
             //do
@@ -185,16 +185,25 @@ namespace AlgorithmAnalysis
                     mapArray.print();
                     break;
                 case 2:
-
+                    Test_Growing_Tree_Algorithm();
                     break;
                 case 3:
-
+                    Test_HuntAndKill_Algorithm();
                     break;
                 case 4:
-
+                    Test_Sidewinder_Algorithm();
                     break;
                 case 5:
-
+                    MapClass mapArrayA1 = new MapClass(size);
+                    Console.WriteLine("\n Double array generated with Prim's algorithm \n");
+                    mapArrayA1.generateMapPrim();
+                    mapArrayA1.print();
+                    Console.WriteLine("\n\n");
+                    Test_Growing_Tree_Algorithm();
+                    Console.WriteLine("\n\n");
+                    Test_HuntAndKill_Algorithm();
+                    Console.WriteLine("\n\n");
+                    Test_Sidewinder_Algorithm();
                     break;
             }
         }
@@ -204,19 +213,23 @@ namespace AlgorithmAnalysis
             {
                 //primo
                 case 1:
-
+                    container.isAll = false;
+                    PrimTimeTest(container);
                     break;
                 case 2:
-
+                    container.isAll = false;
+                    GrowingTreeTimeTest(container);
                     break;
                 case 3:
-
+                    container.isAll = false;
+                    HuntKillTimeTest(container);
                     break;
                 case 4:
-
+                    container.isAll = false;
+                    SidewinderTimeTest(container);
                     break;
                 case 5:
-
+                    Analysis(container);
                     break;
             }
         }
@@ -429,7 +442,26 @@ namespace AlgorithmAnalysis
                 Console.WriteLine();
             }
         }
-
+        /// <summary>
+        /// Growing_Tree algorithm test
+        /// </summary>
+        public static void Test_Growing_Tree_Algorithm()
+        {
+            char[][] mapArray = new char[size][];
+            Console.WriteLine("\n Double array generated with Growing Tree algorithm \n");
+            mapArray = GrowingTree.GenerateMap();
+            GrowingTree.print(mapArray);
+        }
+        /// <summary>
+        /// Sidewinder algorithm test
+        /// </summary>
+        public static void Test_Sidewinder_Algorithm()
+        {
+            char[][] mapArray = new char[size][];
+            Console.WriteLine("\n Double array generated with Sidewinder algorithm \n");
+            mapArray = Sidewinder.GenerateMap();
+            Sidewinder.print(mapArray);
+        }
         public static void Test_GenItems()
         {
             char[][] mapArray = new char[size][];
@@ -451,50 +483,13 @@ namespace AlgorithmAnalysis
         }
 
 
-        /// <summary>
-        /// Algorithm analysis (only generating time at this moment)
-        /// </summary>
-        /// <param name="container"></param>
-        public static void Analysis(MapsContainer container)
-        {
-            Console.Write("Enter integer number for map size: ");
-            string consoleSize = Console.ReadLine();
-            while (!int.TryParse(consoleSize, out size))
-            {
-                Console.WriteLine("\nError: Invalid map size.\n");
-                Console.WriteLine("Enter valid integer number for map size.");
-                Console.WriteLine("Enter \"exit\" to go back to the main menu.");
-                Console.Write("\n >> ");
-                consoleSize = Console.ReadLine();
-                if (consoleSize.ToLower().Trim() == "exit")
-                {
-                    return;
-                }
-            }
 
-            if (size < 5)
+        public static void PrimTimeTest(MapsContainer container)
+        {
+            int size = TimeTestStart();
+            if (size == -1)
             {
-                Console.WriteLine("\nError: Too small map size: {0}", size);
-                Console.WriteLine("Enter valid integer number for map size.");
-                Console.WriteLine("Enter \"exit\" to go back to the main menu.");
-                Console.Write("\n >> ");
-                consoleSize = Console.ReadLine();
-                if (consoleSize.ToLower().Trim() == "exit")
-                {
-                    return;
-                }
-                while (!int.TryParse(consoleSize, out size))
-                {
-                    Console.WriteLine("\nError: Invalid map size.\n");
-                    Console.WriteLine("Enter valid integer number for map size.");
-                    Console.WriteLine("Enter \"exit\" to go back to the main menu.");
-                    Console.Write("\n >> ");
-                    consoleSize = Console.ReadLine();
-                    if (consoleSize.ToLower().Trim() == "exit")
-                    {
-                        return;
-                    }
-                }
+                return;
             }
             Process proc = Process.GetCurrentProcess();
             availableMemory = 1800000000;// (new Microsoft.VisualBasic.Devices.ComputerInfo().AvailablePhysicalMemory) * 0.7;
@@ -542,37 +537,23 @@ namespace AlgorithmAnalysis
                 }
                 GC.Collect();
             }
-            lastMemory += memory;
-
-            Console.WriteLine("\n GrowingTree algorithm \n\n N       Runtime              RAM\n");
-            for (int j = 1; j <= testTimes; j++)
+        }
+        public static void HuntKillTimeTest(MapsContainer container)
+        {
+            int size = TimeTestStart();
+            if (size == -1)
             {
-                myTimer.Start();
-                for (int i = 0; i < generatedMapNumber *j; i++)
-                {
-                    MapClass mapArray = new MapClass(size);
-                    mapArray.generateMapRecursiveBacktracing();
-                    container.addMap(mapArray, 2);
-                }
-                myTimer.Stop();
-                proc.Refresh();
-                memory = (proc.PrivateMemorySize64 / 1000) - lastMemory;
-                Console.WriteLine(" {0,-5}    {1}     {2}B", generatedMapNumber *j, myTimer.Elapsed, memory);
-                myTimer.Reset();
-                if (allTime.ElapsedMilliseconds > runningTime)
-                {
-                    Console.WriteLine("\nError: Program ran too long: {0}", allTime.Elapsed);
-                    return;
-                }
-                if (proc.PrivateMemorySize64 >= availableMemory)
-                {
-                    Console.WriteLine("\nError: Program used too much RAM: {0}MB", proc.PrivateMemorySize64 / 1000000);
-                    return;
-                }
-                GC.Collect();
+                return;
             }
-            lastMemory += memory;
+            Process proc = Process.GetCurrentProcess();
+            availableMemory = 1800000000;// (new Microsoft.VisualBasic.Devices.ComputerInfo().AvailablePhysicalMemory) * 0.7;
+            double memory = 0;
 
+            Stopwatch myTimer = new Stopwatch();
+            Stopwatch allTime = new Stopwatch();
+
+            allTime.Start();
+            lastMemory = proc.PrivateMemorySize64 / 1000;
             Console.WriteLine("\n Hunt and kill algorithm \n\n N       Runtime              RAM\n");
             for (int j = 1; j <= testTimes; j++)
             {
@@ -602,6 +583,159 @@ namespace AlgorithmAnalysis
             }
             allTime.Stop();
             GC.Collect();
+        }
+        public static void GrowingTreeTimeTest(MapsContainer container)
+        {
+            int size = TimeTestStart();
+            if (size == -1)
+            {
+                return;
+            }
+            Process proc = Process.GetCurrentProcess();
+            availableMemory = 1800000000;// (new Microsoft.VisualBasic.Devices.ComputerInfo().AvailablePhysicalMemory) * 0.7;
+            double memory = 0;
+
+            Stopwatch myTimer = new Stopwatch();
+            Stopwatch allTime = new Stopwatch();
+
+            allTime.Start();
+            lastMemory = proc.PrivateMemorySize64 / 1000;
+            Console.WriteLine("\n GrowingTree algorithm \n\n N       Runtime              RAM\n");
+            for (int j = 1; j <= testTimes; j++)
+            {
+                myTimer.Start();
+                for (int i = 0; i < generatedMapNumber * j; i++)
+                {
+                    MapClass mapArray = new MapClass(size);
+                    mapArray.GrowingTreeArray = GrowingTree.GenerateMap();
+                    container.addMap(mapArray, 2);
+                }
+                myTimer.Stop();
+                proc.Refresh();
+                memory = (proc.PrivateMemorySize64 / 1000) - lastMemory;
+                Console.WriteLine(" {0,-5}    {1}     {2}B", generatedMapNumber * j, myTimer.Elapsed, memory);
+                myTimer.Reset();
+                if (allTime.ElapsedMilliseconds > runningTime)
+                {
+                    Console.WriteLine("\nError: Program ran too long: {0}", allTime.Elapsed);
+                    return;
+                }
+                if (proc.PrivateMemorySize64 >= availableMemory)
+                {
+                    Console.WriteLine("\nError: Program used too much RAM: {0}MB", proc.PrivateMemorySize64 / 1000000);
+                    return;
+                }
+                GC.Collect();
+            }
+        }
+        public static void SidewinderTimeTest(MapsContainer container)
+        {
+            int size = TimeTestStart();
+            if (size == -1)
+            {
+                return;
+            }
+            Process proc = Process.GetCurrentProcess();
+            availableMemory = 1800000000;// (new Microsoft.VisualBasic.Devices.ComputerInfo().AvailablePhysicalMemory) * 0.7;
+            double memory = 0;
+
+            Stopwatch myTimer = new Stopwatch();
+            Stopwatch allTime = new Stopwatch();
+
+            allTime.Start();
+            lastMemory = proc.PrivateMemorySize64 / 1000;
+            Console.WriteLine("\n Sidewinder algorithm \n\n N       Runtime              RAM\n");
+            for (int j = 1; j <= testTimes; j++)
+            {
+                myTimer.Start();
+                for (int i = 0; i < generatedMapNumber * j; i++)
+                {
+                    MapClass mapArray = new MapClass(size);
+                    mapArray.SidewinderArray = Sidewinder.GenerateMap();
+                    container.addMap(mapArray, 4);
+                }
+                myTimer.Stop();
+                proc.Refresh();
+                memory = (proc.PrivateMemorySize64 / 1000) - lastMemory;
+                Console.WriteLine(" {0,-5}    {1}     {2}B", generatedMapNumber * j, myTimer.Elapsed, memory);
+                myTimer.Reset();
+                if (allTime.ElapsedMilliseconds > runningTime)
+                {
+                    Console.WriteLine("\nError: Program ran too long: {0}", allTime.Elapsed);
+                    return;
+                }
+                if (proc.PrivateMemorySize64 >= availableMemory)
+                {
+                    Console.WriteLine("\nError: Program used too much RAM: {0}MB", proc.PrivateMemorySize64 / 1000000);
+                    return;
+                }
+                GC.Collect();
+            }
+        }
+        public static int TimeTestStart()
+        {
+            if (container.isAll)
+            {
+                return container.size;
+            }
+            Console.Write("Enter integer number for map size: ");
+            string consoleSize = Console.ReadLine();
+            while (!int.TryParse(consoleSize, out size))
+            {
+                Console.WriteLine("\nError: Invalid map size.\n");
+                Console.WriteLine("Enter valid integer number for map size.");
+                Console.WriteLine("Enter \"exit\" to go back to the main menu.");
+                Console.Write("\n >> ");
+                consoleSize = Console.ReadLine();
+                if (consoleSize.ToLower().Trim() == "exit")
+                {
+                    return -1;
+                }
+            }
+
+            while (size < 5)
+            {
+                Console.WriteLine("\nError: Too small map size: {0}", size);
+                Console.WriteLine("Enter valid integer number for map size.");
+                Console.WriteLine("Enter \"exit\" to go back to the main menu.");
+                Console.Write("\n >> ");
+                consoleSize = Console.ReadLine();
+                if (consoleSize.ToLower().Trim() == "exit")
+                {
+                    return -1;
+                }
+                while (!int.TryParse(consoleSize, out size))
+                {
+                    Console.WriteLine("\nError: Invalid map size.\n");
+                    Console.WriteLine("Enter valid integer number for map size.");
+                    Console.WriteLine("Enter \"exit\" to go back to the main menu.");
+                    Console.Write("\n >> ");
+                    consoleSize = Console.ReadLine();
+                    if (consoleSize.ToLower().Trim() == "exit")
+                    {
+                        return -1;
+                    }
+                }
+            }
+            return size;
+        }
+
+
+
+
+
+        /// <summary>
+        /// Algorithm analysis (only generating time at this moment)
+        /// </summary>
+        /// <param name="container"></param>
+        public static void Analysis(MapsContainer container)
+        {
+            container.size = TimeTestStart();
+            container.isAll = true;
+            PrimTimeTest(container);
+            GrowingTreeTimeTest(container);
+            HuntKillTimeTest(container);
+            SidewinderTimeTest(container);
         }
 
         public static void GenerateItems(char[][] mapArray)

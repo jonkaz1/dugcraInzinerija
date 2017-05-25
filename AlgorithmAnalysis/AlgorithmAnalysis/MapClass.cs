@@ -6,6 +6,8 @@ namespace AlgorithmAnalysis
     public class MapClass
     {
         public char[][] huntKillArray;
+        public char[][] GrowingTreeArray;
+        public char[][] SidewinderArray;
 
         public Node[,] data;
 
@@ -21,6 +23,8 @@ namespace AlgorithmAnalysis
             length = size;
             data = new Node[size, size];
             huntKillArray = new char[size][];
+            GrowingTreeArray = new char[size][];
+            SidewinderArray = new char[size][];
         }
         public int getData(int x, int y)
         {

@@ -172,7 +172,7 @@ namespace AlgorithmAnalysis
                 return false;
             }
         }
-        public void print(char[][] map)
+        public static void print(char[][] map)
         {
             Console.WriteLine(" size: {0}x{0}\n", map.Length);
             for (int i = 0; i < grid.Length; i++)

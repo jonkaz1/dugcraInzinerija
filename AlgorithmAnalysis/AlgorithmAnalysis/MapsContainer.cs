@@ -7,14 +7,19 @@ namespace AlgorithmAnalysis
     {
         //Different algorithm lists
         List<MapClass> MapsList1;   //Prim algorithm
-        List<MapClass> MapsList2;   //Recursive backtracing algorithm
+        List<MapClass> MapsList2;   //Growing tree algorithm
         List<MapClass> MapsList3;   //Hunt&Kill algorithm
+        List<MapClass> MapsList4;   //Sidewinder algorithm
+        public bool isAll;
+        public int size;
 
         public MapsContainer()
         {
             MapsList1 = new List<MapClass>();
             MapsList2 = new List<MapClass>();
             MapsList3 = new List<MapClass>();
+            MapsList4 = new List<MapClass>();
+            isAll = false;
         }
         /// <summary>
         /// Get map by algorithm number and index
@@ -32,6 +37,8 @@ namespace AlgorithmAnalysis
                     return MapsList2[index];
                 case 3:
                     return MapsList3[index];
+                case 4:
+                    return MapsList4[index];
             }
             throw new ArgumentException("This algorithm does not exist.");
         }
@@ -50,6 +57,8 @@ namespace AlgorithmAnalysis
                     return MapsList2;
                 case 3:
                     return MapsList3;
+                case 4:
+                    return MapsList4;
             }
             throw new ArgumentException("This algorithm does not exist.");
         }
@@ -70,6 +79,9 @@ namespace AlgorithmAnalysis
                     break;
                 case 3:
                     MapsList3.Add(map);
+                    break;
+                case 4:
+                    MapsList4.Add(map);
                     break;
             }
         }
