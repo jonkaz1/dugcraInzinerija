@@ -5,6 +5,7 @@ namespace AlgorithmAnalysis
 {
     public class MapClass
     {
+        public char[][] PrimArray;
         public char[][] huntKillArray;
         public char[][] GrowingTreeArray;
         public char[][] SidewinderArray;
@@ -22,6 +23,7 @@ namespace AlgorithmAnalysis
         {
             length = size;
             data = new Node[size, size];
+            PrimArray = new char[size][];
             huntKillArray = new char[size][];
             GrowingTreeArray = new char[size][];
             SidewinderArray = new char[size][];
@@ -58,6 +60,27 @@ namespace AlgorithmAnalysis
             }
         }
 
+        public void changeToArray()
+        {
+            for (int i = 0; i < length; i++)
+            {
+                PrimArray[i] = new char[length];
+            }
+            for (int x = 0; x < length; x++)
+            {
+                for (int y = 0; y < length; y++)
+                {
+                    if (data[x, y].Data == 0)
+                    {
+                        PrimArray[x][y] = '0';
+                    }
+                    else
+                    {
+                        PrimArray[x][y] = '1';
+                    }
+                }
+            }
+        }
 
         /// <summary>
         /// First algorithm
@@ -150,6 +173,7 @@ namespace AlgorithmAnalysis
 
                 validNodes.RemoveAt(ran);
             }
+            changeToArray();
         }
 
 

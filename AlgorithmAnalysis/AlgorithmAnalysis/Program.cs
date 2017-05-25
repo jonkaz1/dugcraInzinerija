@@ -10,6 +10,7 @@ namespace AlgorithmAnalysis
     class Program
     {
         public static int generatedMapNumber = 1000;     //Generated maps number
+        public static int savedMapsNumber = 10;     //Generated maps number
         public static int testTimes = 10;
         public static int NoGo;
         public static double lastMemory;
@@ -237,21 +238,20 @@ namespace AlgorithmAnalysis
         {
             switch (algorithm)
             {
-                //primo
                 case 1:
-
+                    SaveMapOption(1);
                     break;
                 case 2:
-
+                    SaveMapOption(2);
                     break;
                 case 3:
-
+                    SaveMapOption(3);
                     break;
                 case 4:
-
+                    SaveMapOption(4);
                     break;
                 case 5:
-
+                    SaveMapOption(5);
                     break;
             }
         }
@@ -261,19 +261,19 @@ namespace AlgorithmAnalysis
             {
                 //primo
                 case 1:
-
+                    PrimRamTest(container);
                     break;
                 case 2:
-
+                    GrowingTreeRamTest(container);
                     break;
                 case 3:
-
+                    HuntKillRamTest(container);
                     break;
                 case 4:
-
+                    SidewinderRamTest(container);
                     break;
                 case 5:
-
+                    AnalysisRam(container);
                     break;
             }
         }
@@ -300,86 +300,6 @@ namespace AlgorithmAnalysis
             }
         }
         
-        //----------------------------------------------------------------------------------------------------------
-        public static void SaveMap()
-        {
-            for (int i = 0; i < 10; i++)
-            {
-
-                char[][] mapArray = new char[size][];
-
-                mapArray = HuntAndKill.GenerateMap();
-                GenerateItems(mapArray);
-
-                Save save = new Save();
-                List<Save.Tiles> t = new List<Save.Tiles>();
-                Save.Tiles tile;
-
-                #region generate
-                for (int x = 0; x < mapArray.Length; x++)
-                {
-                    for (int y = 0; y < mapArray.Length; y++)
-                    {
-                        tile.tile = new GridTile();
-                        int num = (int)char.GetNumericValue(mapArray[x][y]);
-                        if (num >= 1)
-                        {
-                            tile.tile.type = GridTile.TileTypes.Ground;
-                        }
-                        if (num == 0)
-                        {
-                            tile.tile.type = GridTile.TileTypes.Wall;
-                        }
-                        tile.pos = new WorldPos(x, y);
-                        if (HuntAndKill.StartingPoint.x == x && HuntAndKill.StartingPoint.y == y)
-                        {
-                            tile.tile.containedObject = GridTile.ContainedObject.StartingPoint;
-                        }
-                        else if (num == 2)
-                        {
-                            tile.tile.containedObject = GridTile.ContainedObject.Spear;
-                        }
-                        else if (num == 3)
-                        {
-                            tile.tile.containedObject = GridTile.ContainedObject.Ladder;
-                        }
-                        else if (num == 4)
-                        {
-                            tile.tile.containedObject = GridTile.ContainedObject.Enemy;
-                        }
-                        else if (num == 5)
-                        {
-                            tile.tile.containedObject = GridTile.ContainedObject.Pit;
-                        }
-                        else if (num == 6)
-                        {
-                            tile.tile.containedObject = GridTile.ContainedObject.Chest;
-                        }
-                        t.Add(tile);
-                    }
-                }
-                #endregion
-
-                save.tiles = t.ToArray();
-
-                MemoryStream stream = new MemoryStream();
-                DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(Save));
-
-                ser.WriteObject(stream, save);
-                stream.Position = 0;
-                StreamReader sr = new StreamReader(stream);
-                FileStream file = new FileStream("maps\\"+i+";"+i+".json", FileMode.OpenOrCreate);
-                stream.WriteTo(file);
-                stream.Close();
-                file.Close();
-                file = new FileStream("levelConfig.cfg", FileMode.OpenOrCreate);
-                string conf = "gridSize=" + HuntAndKill.mapSize;
-                file.Write(Encoding.UTF8.GetBytes(conf), 0, conf.Length);
-                file.Close();
-            }
-            Console.WriteLine("Saved!");
-        }
-
         static public void DisplayMenu(int n)
         {
             switch(n)
@@ -416,12 +336,11 @@ namespace AlgorithmAnalysis
             }
 
         }
+        //----------------------------------------------------------------------------------------------------------
 
 
 
-        /// <summary>
-        /// Hunt and kill algorithm test
-        /// </summary>
+
         public static void Test_HuntAndKill_Algorithm()
         {
             char[][] mapArray = new char[size][];
@@ -442,9 +361,6 @@ namespace AlgorithmAnalysis
                 Console.WriteLine();
             }
         }
-        /// <summary>
-        /// Growing_Tree algorithm test
-        /// </summary>
         public static void Test_Growing_Tree_Algorithm()
         {
             char[][] mapArray = new char[size][];
@@ -452,9 +368,6 @@ namespace AlgorithmAnalysis
             mapArray = GrowingTree.GenerateMap();
             GrowingTree.print(mapArray);
         }
-        /// <summary>
-        /// Sidewinder algorithm test
-        /// </summary>
         public static void Test_Sidewinder_Algorithm()
         {
             char[][] mapArray = new char[size][];
@@ -483,7 +396,6 @@ namespace AlgorithmAnalysis
         }
 
 
-
         public static void PrimTimeTest(MapsContainer container)
         {
             int size = TimeTestStart();
@@ -494,7 +406,7 @@ namespace AlgorithmAnalysis
             Process proc = Process.GetCurrentProcess();
             availableMemory = 1800000000;// (new Microsoft.VisualBasic.Devices.ComputerInfo().AvailablePhysicalMemory) * 0.7;
             double memory = 0;
-            Console.WriteLine("\n Prim's algorithm \n\n N        Runtime              RAM\n");
+            Console.WriteLine("\n Prim's algorithm \n\n N        Runtime\n");
 
             Stopwatch myTimer = new Stopwatch();
             Stopwatch allTime = new Stopwatch();
@@ -522,9 +434,8 @@ namespace AlgorithmAnalysis
                 myTimer.Stop();
                 proc.Refresh();
                 memory = (proc.PrivateMemorySize64 / 1000) - lastMemory;
-                Console.WriteLine(" {0,-5}    {1}     {2}B", generatedMapNumber * j, myTimer.Elapsed, memory);
+                Console.WriteLine(" {0,-5}    {1}", generatedMapNumber * j, myTimer.Elapsed);
                 myTimer.Reset();
-                allTime = myTimer;
                 if (allTime.ElapsedMilliseconds > runningTime)
                 {
                     Console.WriteLine("\nError: Program ran too long: {0}", allTime.Elapsed);
@@ -554,7 +465,7 @@ namespace AlgorithmAnalysis
 
             allTime.Start();
             lastMemory = proc.PrivateMemorySize64 / 1000;
-            Console.WriteLine("\n Hunt and kill algorithm \n\n N       Runtime              RAM\n");
+            Console.WriteLine("\n Hunt and kill algorithm \n\n N       Runtime\n");
             for (int j = 1; j <= testTimes; j++)
             {
                 myTimer.Start();
@@ -567,7 +478,7 @@ namespace AlgorithmAnalysis
                 myTimer.Stop();
                 proc.Refresh();
                 memory = (proc.PrivateMemorySize64 / 1000) - lastMemory;
-                Console.WriteLine(" {0, -5}    {1}     {2}B", generatedMapNumber * j, myTimer.Elapsed, memory);
+                Console.WriteLine(" {0, -5}    {1}", generatedMapNumber * j, myTimer.Elapsed);
                 myTimer.Reset();
                 if (allTime.ElapsedMilliseconds > runningTime)
                 {
@@ -600,7 +511,7 @@ namespace AlgorithmAnalysis
 
             allTime.Start();
             lastMemory = proc.PrivateMemorySize64 / 1000;
-            Console.WriteLine("\n GrowingTree algorithm \n\n N       Runtime              RAM\n");
+            Console.WriteLine("\n GrowingTree algorithm \n\n N       Runtime\n");
             for (int j = 1; j <= testTimes; j++)
             {
                 myTimer.Start();
@@ -613,7 +524,7 @@ namespace AlgorithmAnalysis
                 myTimer.Stop();
                 proc.Refresh();
                 memory = (proc.PrivateMemorySize64 / 1000) - lastMemory;
-                Console.WriteLine(" {0,-5}    {1}     {2}B", generatedMapNumber * j, myTimer.Elapsed, memory);
+                Console.WriteLine(" {0,-5}    {1}", generatedMapNumber * j, myTimer.Elapsed);
                 myTimer.Reset();
                 if (allTime.ElapsedMilliseconds > runningTime)
                 {
@@ -644,7 +555,7 @@ namespace AlgorithmAnalysis
 
             allTime.Start();
             lastMemory = proc.PrivateMemorySize64 / 1000;
-            Console.WriteLine("\n Sidewinder algorithm \n\n N       Runtime              RAM\n");
+            Console.WriteLine("\n Sidewinder algorithm \n\n N       Runtime\n");
             for (int j = 1; j <= testTimes; j++)
             {
                 myTimer.Start();
@@ -657,7 +568,7 @@ namespace AlgorithmAnalysis
                 myTimer.Stop();
                 proc.Refresh();
                 memory = (proc.PrivateMemorySize64 / 1000) - lastMemory;
-                Console.WriteLine(" {0,-5}    {1}     {2}B", generatedMapNumber * j, myTimer.Elapsed, memory);
+                Console.WriteLine(" {0,-5}    {1}", generatedMapNumber * j, myTimer.Elapsed);
                 myTimer.Reset();
                 if (allTime.ElapsedMilliseconds > runningTime)
                 {
@@ -719,15 +630,6 @@ namespace AlgorithmAnalysis
             }
             return size;
         }
-
-
-
-
-
-        /// <summary>
-        /// Algorithm analysis (only generating time at this moment)
-        /// </summary>
-        /// <param name="container"></param>
         public static void Analysis(MapsContainer container)
         {
             container.size = TimeTestStart();
@@ -738,6 +640,330 @@ namespace AlgorithmAnalysis
             SidewinderTimeTest(container);
         }
 
+
+        public static void PrimRamTest(MapsContainer container)
+        {
+            int size = TimeTestStart();
+            if (size == -1)
+            {
+                return;
+            }
+            Process proc = Process.GetCurrentProcess();
+            availableMemory = 1800000000;// (new Microsoft.VisualBasic.Devices.ComputerInfo().AvailablePhysicalMemory) * 0.7;
+            double memory = 0;
+            Console.WriteLine("\n Prim's algorithm \n\n N        RAM\n");
+
+            Stopwatch allTime = new Stopwatch();
+
+            allTime.Start();
+            lastMemory = proc.PrivateMemorySize64 / 1000;
+            for (int j = 1; j <= testTimes; j++)
+            {
+                for (int i = 0; i < generatedMapNumber * j; i++)
+                {
+                    MapClass mapArray = new MapClass(size);
+                    mapArray.generateMapPrim();
+                    container.addMap(mapArray, 1);
+                    if (i % 10 == 0)
+                    {
+                        if (proc.PrivateMemorySize64 >= availableMemory)
+                        {
+                            Console.WriteLine("\nError: Program used too much RAM: {0}MB {1}MB", proc.PrivateMemorySize64 / 1000000, availableMemory / 1000000);
+                            return;
+                        }
+                    }
+                }
+                proc.Refresh();
+                memory = (proc.PrivateMemorySize64 / 1000) - lastMemory;
+                Console.WriteLine(" {0,-5}    {1}B", generatedMapNumber * j,  memory);
+                if (allTime.ElapsedMilliseconds > runningTime)
+                {
+                    Console.WriteLine("\nError: Program ran too long: {0}", allTime.Elapsed);
+                    return;
+                }
+                if (proc.PrivateMemorySize64 >= availableMemory)
+                {
+                    Console.WriteLine("\nError: Program used too much RAM: {0}MB", proc.PrivateMemorySize64 / 1000000);
+                    return;
+                }
+                GC.Collect();
+            }
+        }
+        public static void GrowingTreeRamTest(MapsContainer container)
+        {
+            int size = TimeTestStart();
+            if (size == -1)
+            {
+                return;
+            }
+            Process proc = Process.GetCurrentProcess();
+            availableMemory = 1800000000;// (new Microsoft.VisualBasic.Devices.ComputerInfo().AvailablePhysicalMemory) * 0.7;
+            double memory = 0;
+            Console.WriteLine("\n GrowingTree algorithm \n\n N        RAM\n");
+
+            Stopwatch allTime = new Stopwatch();
+
+            allTime.Start();
+            lastMemory = proc.PrivateMemorySize64 / 1000;
+            for (int j = 1; j <= testTimes; j++)
+            {
+                for (int i = 0; i < generatedMapNumber * j; i++)
+                {
+                    MapClass mapArray = new MapClass(size);
+                    mapArray.GrowingTreeArray = GrowingTree.GenerateMap();
+                    container.addMap(mapArray, 2);
+                    if (i % 10 == 0)
+                    {
+                        if (proc.PrivateMemorySize64 >= availableMemory)
+                        {
+                            Console.WriteLine("\nError: Program used too much RAM: {0}MB {1}MB", proc.PrivateMemorySize64 / 1000000, availableMemory / 1000000);
+                            return;
+                        }
+                    }
+                }
+                proc.Refresh();
+                memory = (proc.PrivateMemorySize64 / 1000) - lastMemory;
+                Console.WriteLine(" {0,-5}    {1}B", generatedMapNumber * j, memory);
+                if (allTime.ElapsedMilliseconds > runningTime)
+                {
+                    Console.WriteLine("\nError: Program ran too long: {0}", allTime.Elapsed);
+                    return;
+                }
+                if (proc.PrivateMemorySize64 >= availableMemory)
+                {
+                    Console.WriteLine("\nError: Program used too much RAM: {0}MB", proc.PrivateMemorySize64 / 1000000);
+                    return;
+                }
+                GC.Collect();
+            }
+        }
+        public static void HuntKillRamTest(MapsContainer container)
+        {
+            int size = TimeTestStart();
+            if (size == -1)
+            {
+                return;
+            }
+            Process proc = Process.GetCurrentProcess();
+            availableMemory = 1800000000;// (new Microsoft.VisualBasic.Devices.ComputerInfo().AvailablePhysicalMemory) * 0.7;
+            double memory = 0;
+            Console.WriteLine("\n Hunt and kill algorithm \n\n N        RAM\n");
+
+            Stopwatch allTime = new Stopwatch();
+
+            allTime.Start();
+            lastMemory = proc.PrivateMemorySize64 / 1000;
+            for (int j = 1; j <= testTimes; j++)
+            {
+                for (int i = 0; i < generatedMapNumber * j; i++)
+                {
+                    MapClass mapArray = new MapClass(size);
+                    mapArray.huntKillArray = HuntAndKill.GenerateMap();
+                    container.addMap(mapArray, 3);
+                    if (i % 10 == 0)
+                    {
+                        if (proc.PrivateMemorySize64 >= availableMemory)
+                        {
+                            Console.WriteLine("\nError: Program used too much RAM: {0}MB {1}MB", proc.PrivateMemorySize64 / 1000000, availableMemory / 1000000);
+                            return;
+                        }
+                    }
+                }
+                proc.Refresh();
+                memory = (proc.PrivateMemorySize64 / 1000) - lastMemory;
+                Console.WriteLine(" {0,-5}    {1}B", generatedMapNumber * j, memory);
+                if (allTime.ElapsedMilliseconds > runningTime)
+                {
+                    Console.WriteLine("\nError: Program ran too long: {0}", allTime.Elapsed);
+                    return;
+                }
+                if (proc.PrivateMemorySize64 >= availableMemory)
+                {
+                    Console.WriteLine("\nError: Program used too much RAM: {0}MB", proc.PrivateMemorySize64 / 1000000);
+                    return;
+                }
+                GC.Collect();
+            }
+        }
+        public static void SidewinderRamTest(MapsContainer container)
+        {
+            int size = TimeTestStart();
+            if (size == -1)
+            {
+                return;
+            }
+            Process proc = Process.GetCurrentProcess();
+            availableMemory = 1800000000;// (new Microsoft.VisualBasic.Devices.ComputerInfo().AvailablePhysicalMemory) * 0.7;
+            double memory = 0;
+            Console.WriteLine("\n Sidewinder algorithm \n\n N        RAM\n");
+
+            Stopwatch allTime = new Stopwatch();
+
+            allTime.Start();
+            lastMemory = proc.PrivateMemorySize64 / 1000;
+            for (int j = 1; j <= testTimes; j++)
+            {
+                for (int i = 0; i < generatedMapNumber * j; i++)
+                {
+                    MapClass mapArray = new MapClass(size);
+                    mapArray.SidewinderArray = Sidewinder.GenerateMap();
+                    container.addMap(mapArray, 4);
+                    if (i % 10 == 0)
+                    {
+                        if (proc.PrivateMemorySize64 >= availableMemory)
+                        {
+                            Console.WriteLine("\nError: Program used too much RAM: {0}MB {1}MB", proc.PrivateMemorySize64 / 1000000, availableMemory / 1000000);
+                            return;
+                        }
+                    }
+                }
+                proc.Refresh();
+                memory = (proc.PrivateMemorySize64 / 1000) - lastMemory;
+                Console.WriteLine(" {0,-5}    {1}B", generatedMapNumber * j, memory);
+                if (allTime.ElapsedMilliseconds > runningTime)
+                {
+                    Console.WriteLine("\nError: Program ran too long: {0}", allTime.Elapsed);
+                    return;
+                }
+                if (proc.PrivateMemorySize64 >= availableMemory)
+                {
+                    Console.WriteLine("\nError: Program used too much RAM: {0}MB", proc.PrivateMemorySize64 / 1000000);
+                    return;
+                }
+                GC.Collect();
+            }
+        }
+        public static void AnalysisRam(MapsContainer container)
+        {
+            container.size = TimeTestStart();
+            container.isAll = true;
+            PrimRamTest(container);
+            GrowingTreeRamTest(container);
+            HuntKillRamTest(container);
+            SidewinderRamTest(container);
+        }
+
+        public static void SaveMapOption(int algorithm)
+        {
+            for (int i = 0; i < savedMapsNumber; i++)
+            {
+                char[][] mapArray = new char[size][];
+
+                switch (algorithm)
+                {
+                    case 1:
+                        MapClass primas = new MapClass(size);
+                        primas.generateMapPrim();
+                        mapArray = primas.PrimArray;
+                        GenerateItems(mapArray);
+                        break;
+                    case 2:
+                        mapArray = GrowingTree.GenerateMap();
+                        GenerateItemsAll(mapArray, GrowingTree.mapSize, GrowingTree.xs, GrowingTree.ys );
+                        break;
+                    case 3:
+                        mapArray = HuntAndKill.GenerateMap();
+                        GenerateItemsAll(mapArray, HuntAndKill.mapSize, HuntAndKill.StartingPoint.x, HuntAndKill.StartingPoint.y);
+                        break;
+                    case 4:
+                        mapArray = Sidewinder.GenerateMap();
+                        GenerateItemsAll(mapArray, Sidewinder.mapSize, Sidewinder.xs, Sidewinder.ys);
+                        break;
+                    case 5:
+                        if ((savedMapsNumber / 4) > i)
+                        {
+                            MapClass primasA1 = new MapClass(size);
+                            primasA1.generateMapPrim();
+                            mapArray = primasA1.PrimArray;
+                            GenerateItems(mapArray);
+                        }
+                        else if (((savedMapsNumber / 4) < i)&&((savedMapsNumber / 2) > i))
+                        {
+                            mapArray = GrowingTree.GenerateMap();
+                            GenerateItemsAll(mapArray, GrowingTree.mapSize, GrowingTree.xs, GrowingTree.ys );
+                        }
+                        else if (((savedMapsNumber / 2) <= i) && ((savedMapsNumber / 4 * 3) > i))
+                        {
+                            mapArray = HuntAndKill.GenerateMap();
+                            GenerateItemsAll(mapArray, HuntAndKill.mapSize, HuntAndKill.StartingPoint.x, HuntAndKill.StartingPoint.y);
+                        }
+                        else
+                        {
+                            mapArray = Sidewinder.GenerateMap();
+                            GenerateItemsAll(mapArray, Sidewinder.mapSize, Sidewinder.xs, Sidewinder.ys);
+                        }
+                        break;
+                }
+                //GenerateItems(mapArray);
+
+                Save save = new Save();
+                List<Save.Tiles> t = new List<Save.Tiles>();
+                Save.Tiles tile;
+
+                #region generate
+                for (int x = 0; x < mapArray.Length; x++)
+                {
+                    for (int y = 0; y < mapArray.Length; y++)
+                    {
+                        tile.tile = new GridTile();
+                        int num = (int)char.GetNumericValue(mapArray[x][y]);
+                        if (num >= 1)
+                        {
+                            tile.tile.type = GridTile.TileTypes.Ground;
+                        }
+                        if (num == 0)
+                        {
+                            tile.tile.type = GridTile.TileTypes.Wall;
+                        }
+                        tile.pos = new WorldPos(x, y);
+                        if (HuntAndKill.StartingPoint.x == x && HuntAndKill.StartingPoint.y == y)
+                        {
+                            tile.tile.containedObject = GridTile.ContainedObject.StartingPoint;
+                        }
+                        else if (num == 2)
+                        {
+                            tile.tile.containedObject = GridTile.ContainedObject.Spear;
+                        }
+                        else if (num == 3)
+                        {
+                            tile.tile.containedObject = GridTile.ContainedObject.Ladder;
+                        }
+                        else if (num == 4)
+                        {
+                            tile.tile.containedObject = GridTile.ContainedObject.Enemy;
+                        }
+                        else if (num == 5)
+                        {
+                            tile.tile.containedObject = GridTile.ContainedObject.Pit;
+                        }
+                        else if (num == 6)
+                        {
+                            tile.tile.containedObject = GridTile.ContainedObject.Chest;
+                        }
+                        t.Add(tile);
+                    }
+                }
+                #endregion
+
+                save.tiles = t.ToArray();
+
+                MemoryStream stream = new MemoryStream();
+                DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(Save));
+
+                ser.WriteObject(stream, save);
+                stream.Position = 0;
+                StreamReader sr = new StreamReader(stream);
+                FileStream file = new FileStream("maps\\" + i + ";" + i + ".json", FileMode.OpenOrCreate);
+                stream.WriteTo(file);
+                stream.Close();
+                file.Close();
+                file = new FileStream("levelConfig.cfg", FileMode.OpenOrCreate);
+                string conf = "gridSize=" + HuntAndKill.mapSize;
+                file.Write(Encoding.UTF8.GetBytes(conf), 0, conf.Length);
+                file.Close();
+            }
+            Console.WriteLine("Saved!");
+        }
         public static void GenerateItems(char[][] mapArray)
         {
 
@@ -838,6 +1064,139 @@ namespace AlgorithmAnalysis
 
             while (validPos.Count > 0)
             {                
+                int num = rand.Next(0, validPos.Count);
+
+                if (validPos.Count == 1)
+                {
+                    point = validPos[num];
+                    mapArray[point.pos.x][point.pos.y] = '3';
+                }
+                else if (!placedChest)
+                {
+                    point = validPos[num];
+                    mapArray[point.pos.x][point.pos.y] = '6';
+                    mapArray[point.next.x][point.next.y] = '4';
+                    placedChest = true;
+                }
+                else
+                {
+                    if (!placedSpear)
+                    {
+                        point = validPos[num];
+                        mapArray[point.pos.x][point.pos.y] = '2';
+                        mapArray[point.next.x][point.next.y] = '5';
+                        placedSpear = true;
+                    }
+                    else
+                    {
+                        point = validPos[num];
+                        mapArray[point.pos.x][point.pos.y] = '3';
+                        mapArray[point.next.x][point.next.y] = '5';
+                    }
+                }
+                validPos.RemoveAt(num);
+            }
+        }
+        public static void GenerateItemsAll(char[][] mapArray, int MapSize, int StartingPointX, int StartingPointY)
+        {
+
+            List<TilePoint> validPos = new List<TilePoint>();
+
+            for (int x = 1; x < size - 1; x++)
+            {
+                for (int y = 1; y < MapSize - 1; y++)
+                {
+                    if (StartingPointX == x && StartingPointY == y)
+                    {
+                        mapArray[x][y] = 'X';
+                    }
+                    else if (mapArray[x][y] == '1')
+                    {
+                        if (mapArray[x - 1][y] == '0' && mapArray[x + 1][y] == '0')
+                        {
+                            if (mapArray[x][y + 1] == '0' || mapArray[x][y - 1] == '0')
+                            {
+                                TilePoint p = new TilePoint();
+                                p.pos = new WorldPos(x, y);
+
+                                if (mapArray[x][y + 1] == '0')
+                                {
+                                    p.next = new WorldPos(x, y - 1);
+                                }
+                                else
+                                {
+                                    p.next = new WorldPos(x, y + 1);
+                                }
+                                validPos.Add(p);
+                            }
+                        }
+                        else if (mapArray[x][y - 1] == '0' && mapArray[x][y + 1] == '0')
+                        {
+                            if (mapArray[x + 1][y] == '0' || mapArray[x - 1][y] == '0')
+                            {
+                                TilePoint p = new TilePoint();
+                                p.pos = new WorldPos(x, y);
+
+                                if (mapArray[x + 1][y] == '0')
+                                {
+                                    p.next = new WorldPos(x - 1, y);
+                                }
+                                else
+                                {
+                                    p.next = new WorldPos(x + 1, y);
+                                }
+                                validPos.Add(p);
+                            }
+                        }
+                    }
+                }
+            }
+
+            bool placedChest = false;
+            bool placedSpear = false;
+            TilePoint point = new TilePoint();
+            Random rand = new Random();
+
+
+            if (validPos.Count == 1)
+            {
+                point = validPos[0];
+                mapArray[point.pos.x][point.pos.y] = '6';
+                validPos.RemoveAt(0);
+            }
+            else if (validPos.Count == 2)
+            {
+                int num = rand.Next(0, validPos.Count);
+                point = validPos[num];
+                mapArray[point.pos.x][point.pos.y] = '6';
+                mapArray[point.next.x][point.next.y] = '4';
+                validPos.RemoveAt(num);
+
+                point = validPos[0];
+                mapArray[point.pos.x][point.pos.y] = '2';
+                validPos.RemoveAt(0);
+            }
+            else if (validPos.Count == 3)
+            {
+                int num = rand.Next(0, validPos.Count);
+                point = validPos[num];
+                mapArray[point.pos.x][point.pos.y] = '6';
+                mapArray[point.next.x][point.next.y] = '4';
+                validPos.RemoveAt(num);
+
+                num = rand.Next(0, validPos.Count);
+                point = validPos[num];
+                mapArray[point.pos.x][point.pos.y] = '2';
+                mapArray[point.next.x][point.next.y] = '5';
+                validPos.RemoveAt(num);
+
+                point = validPos[0];
+                mapArray[point.pos.x][point.pos.y] = '3';
+                validPos.RemoveAt(0);
+            }
+
+            while (validPos.Count > 0)
+            {
                 int num = rand.Next(0, validPos.Count);
 
                 if (validPos.Count == 1)
