@@ -11,6 +11,7 @@ namespace AlgorithmAnalysis
     {
         public static int generatedMapNumber = 1000;     //Generated maps number
         public static int savedMapsNumber = 10;     //Generated maps number
+        public static int ComplexityNumber = 20;     //Generated maps number
         public static int testTimes = 10;
         public static int NoGo;
         public static double lastMemory;
@@ -281,21 +282,25 @@ namespace AlgorithmAnalysis
         {
             switch (algorithm)
             {
-                //primo
                 case 1:
-
+                    //int size1 = TimeTestStart();
+                    FindNoGOOption(1);
                     break;
                 case 2:
-
+                    //int size2 = TimeTestStart();
+                    FindNoGOOption(2);
                     break;
                 case 3:
-
+                    //int size3 = TimeTestStart();
+                    FindNoGOOption(3);
                     break;
                 case 4:
-
+                    //int size4 = TimeTestStart();
+                    FindNoGOOption(4);
                     break;
                 case 5:
-
+                    //int size5 = TimeTestStart();
+                    FindNoGOOption(5);
                     break;
             }
         }
@@ -628,6 +633,30 @@ namespace AlgorithmAnalysis
                     }
                 }
             }
+            while (size > 500)
+            {
+                Console.WriteLine("\nError: Too large map size: {0}", size);
+                Console.WriteLine("Enter valid integer number for map size (500 or less).");
+                Console.WriteLine("Enter \"exit\" to go back to the main menu.");
+                Console.Write("\n >> ");
+                consoleSize = Console.ReadLine();
+                if (consoleSize.ToLower().Trim() == "exit")
+                {
+                    return -1;
+                }
+                while (!int.TryParse(consoleSize, out size))
+                {
+                    Console.WriteLine("\nError: Invalid map size.\n");
+                    Console.WriteLine("Enter valid integer number for map size.");
+                    Console.WriteLine("Enter \"exit\" to go back to the main menu.");
+                    Console.Write("\n >> ");
+                    consoleSize = Console.ReadLine();
+                    if (consoleSize.ToLower().Trim() == "exit")
+                    {
+                        return -1;
+                    }
+                }
+            }
             return size;
         }
         public static void Analysis(MapsContainer container)
@@ -855,7 +884,7 @@ namespace AlgorithmAnalysis
                         MapClass primas = new MapClass(size);
                         primas.generateMapPrim();
                         mapArray = primas.PrimArray;
-                        GenerateItems(mapArray);
+                        GenerateItemsAll(mapArray, primas.length, primas.isStart.Position.x, primas.isStart.Position.y);
                         break;
                     case 2:
                         mapArray = GrowingTree.GenerateMap();
@@ -875,7 +904,7 @@ namespace AlgorithmAnalysis
                             MapClass primasA1 = new MapClass(size);
                             primasA1.generateMapPrim();
                             mapArray = primasA1.PrimArray;
-                            GenerateItems(mapArray);
+                            GenerateItemsAll(mapArray, primasA1.length, primasA1.isStart.Position.x, primasA1.isStart.Position.y);
                         }
                         else if (((savedMapsNumber / 4) < i)&&((savedMapsNumber / 2) > i))
                         {
@@ -1231,16 +1260,128 @@ namespace AlgorithmAnalysis
             }
         }
 
-        public static void findNoGO(char[][] mapArray)
-        {
 
+        public static void FindNoGOOption(int algorithm)
+        {
+            int noGoAVG = 0;
+            for (int i = 0; i < ComplexityNumber; i++)
+            {
+                NoGo = 0;
+                char[][] mapArray = new char[size][];
+
+                switch (algorithm)
+                {
+                    case 1:
+                        MapClass primas = new MapClass(size);
+                        primas.generateMapPrim();
+                        mapArray = primas.PrimArray;
+                        GenerateItemsAll(mapArray, primas.length, primas.isStart.Position.x, primas.isStart.Position.y);
+                        break;
+                    case 2:
+                        mapArray = GrowingTree.GenerateMap();
+                        GenerateItemsAll(mapArray, GrowingTree.mapSize, GrowingTree.xs, GrowingTree.ys);
+                        break;
+                    case 3:
+                        mapArray = HuntAndKill.GenerateMap();
+                        GenerateItemsAll(mapArray, HuntAndKill.mapSize, HuntAndKill.StartingPoint.x, HuntAndKill.StartingPoint.y);
+                        break;
+                    case 4:
+                        mapArray = Sidewinder.GenerateMap();
+                        GenerateItemsAll(mapArray, Sidewinder.mapSize, Sidewinder.xs, Sidewinder.ys);
+                        break;
+                    case 5:
+                        FindNoGOOption(1);
+                        FindNoGOOption(2);
+                        FindNoGOOption(3);
+                        FindNoGOOption(4);
+                        return;
+                }
+
+                Save save = new Save();
+                List<Save.Tiles> t = new List<Save.Tiles>();
+                Save.Tiles tile;
+
+                #region generate
+                for (int x = 0; x < mapArray.Length; x++)
+                {
+                    for (int y = 0; y < mapArray.Length; y++)
+                    {
+                        tile.tile = new GridTile();
+                        int num = (int)char.GetNumericValue(mapArray[x][y]);
+                        if (num >= 1)
+                        {
+                            tile.tile.type = GridTile.TileTypes.Ground;
+                        }
+                        if (num == 0)
+                        {
+                            tile.tile.type = GridTile.TileTypes.Wall;
+                        }
+                        tile.pos = new WorldPos(x, y);
+                        if (HuntAndKill.StartingPoint.x == x && HuntAndKill.StartingPoint.y == y)
+                        {
+                            tile.tile.containedObject = GridTile.ContainedObject.StartingPoint;
+                        }
+                        else if (num == 2)
+                        {
+                            tile.tile.containedObject = GridTile.ContainedObject.Spear;
+
+                        }
+                        else if (num == 3)
+                        {
+                            tile.tile.containedObject = GridTile.ContainedObject.Ladder;
+                            NoGo++;
+                        }
+                        else if (num == 4)
+                        {
+                            tile.tile.containedObject = GridTile.ContainedObject.Enemy;
+                        }
+                        else if (num == 5)
+                        {
+                            tile.tile.containedObject = GridTile.ContainedObject.Pit;
+                            NoGo++;
+                        }
+                        else if (num == 6)
+                        {
+                            tile.tile.containedObject = GridTile.ContainedObject.Chest;
+                            NoGo++;
+                        }
+                        t.Add(tile);
+                    }
+                }
+                #endregion
+                noGoAVG += NoGo;
+                switch (algorithm)
+                {
+                    case 1:
+                        Console.WriteLine("Prim          algorithm blind alley number: {0,-5}", NoGo);
+                        break;
+                    case 2:
+                        Console.WriteLine("Growing Tree  algorithm blind alley number: {0,-5}", NoGo);
+                        break;
+                    case 3:
+                        Console.WriteLine("Hunt and Kill algorithm blind alley number: {0,-5}", NoGo);
+                        break;
+                    case 4:
+                        Console.WriteLine("Sidewinder    algorithm blind alley number: {0,-5}", NoGo);
+                        break;
+                }
+                
+             
+            }
+            noGoAVG /= ComplexityNumber;
+            Console.WriteLine("Blind alley number average: {0,-5}\n", noGoAVG);
+        }
+
+        public static void findNoGO(char[][] mapArray, int MapSize, int StartingPointX, int StartingPointY)
+        {
+            NoGo = 0;
             List<TilePoint> validPos = new List<TilePoint>();
 
             for (int x = 1; x < size - 1; x++)
             {
-                for (int y = 1; y < HuntAndKill.mapSize - 1; y++)
+                for (int y = 1; y < MapSize - 1; y++)
                 {
-                    if (HuntAndKill.StartingPoint.x == x && HuntAndKill.StartingPoint.y == y)
+                    if (StartingPointX == x && StartingPointY == y)
                     {
                         mapArray[x][y] = 'X';
                     }
@@ -1255,12 +1396,10 @@ namespace AlgorithmAnalysis
 
                                 if (mapArray[x][y + 1] == '0')
                                 {
-                                    NoGo++;
                                     p.next = new WorldPos(x, y - 1);
                                 }
                                 else
                                 {
-                                    NoGo++;
                                     p.next = new WorldPos(x, y + 1);
                                 }
                                 validPos.Add(p);
@@ -1275,12 +1414,10 @@ namespace AlgorithmAnalysis
 
                                 if (mapArray[x + 1][y] == '0')
                                 {
-                                    NoGo++;
                                     p.next = new WorldPos(x - 1, y);
                                 }
                                 else
                                 {
-                                    NoGo++;
                                     p.next = new WorldPos(x + 1, y);
                                 }
                                 validPos.Add(p);
@@ -1301,6 +1438,7 @@ namespace AlgorithmAnalysis
                 point = validPos[0];
                 mapArray[point.pos.x][point.pos.y] = '6';
                 validPos.RemoveAt(0);
+                NoGo++;
             }
             else if (validPos.Count == 2)
             {
@@ -1313,6 +1451,8 @@ namespace AlgorithmAnalysis
                 point = validPos[0];
                 mapArray[point.pos.x][point.pos.y] = '2';
                 validPos.RemoveAt(0);
+                NoGo++;
+
             }
             else if (validPos.Count == 3)
             {
@@ -1331,6 +1471,8 @@ namespace AlgorithmAnalysis
                 point = validPos[0];
                 mapArray[point.pos.x][point.pos.y] = '3';
                 validPos.RemoveAt(0);
+                NoGo++;
+
             }
 
             while (validPos.Count > 0)
@@ -1341,6 +1483,7 @@ namespace AlgorithmAnalysis
                 {
                     point = validPos[num];
                     mapArray[point.pos.x][point.pos.y] = '3';
+                    NoGo++;
                 }
                 else if (!placedChest)
                 {
@@ -1348,6 +1491,7 @@ namespace AlgorithmAnalysis
                     mapArray[point.pos.x][point.pos.y] = '6';
                     mapArray[point.next.x][point.next.y] = '4';
                     placedChest = true;
+                    NoGo++;
                 }
                 else
                 {
@@ -1357,22 +1501,138 @@ namespace AlgorithmAnalysis
                         mapArray[point.pos.x][point.pos.y] = '2';
                         mapArray[point.next.x][point.next.y] = '5';
                         placedSpear = true;
+                        NoGo++;
                     }
                     else
                     {
                         point = validPos[num];
                         mapArray[point.pos.x][point.pos.y] = '3';
                         mapArray[point.next.x][point.next.y] = '5';
+                        NoGo++;
                     }
                 }
                 validPos.RemoveAt(num);
             }
+            Console.WriteLine("Blind alley number: { 0,-5}", NoGo);
         }
 
+        
         public struct TilePoint
         {
             public WorldPos pos;
             public WorldPos next;
+        }
+
+        public static void FindNoGOOptionNotWorking(int algorithm, int size)
+        {
+
+            int noGoAVG = 0;
+            for (int i = 0; i < ComplexityNumber; i++)
+            {
+                NoGo = 0;
+                char[][] mapArray = new char[size][];
+
+                switch (algorithm)
+                {
+                    case 1:
+                        MapClass primas = new MapClass(size);
+                        primas.generateMapPrim();
+                        mapArray = primas.PrimArray;
+                        GenerateItemsAll(mapArray, primas.length, primas.isStart.Position.x, primas.isStart.Position.y);
+                        break;
+                    case 2:
+                        mapArray = GrowingTree.GenerateMap();
+                        GenerateItemsAll(mapArray, GrowingTree.mapSize, GrowingTree.xs, GrowingTree.ys);
+                        break;
+                    case 3:
+                        mapArray = HuntAndKill.GenerateMap();
+                        GenerateItemsAll(mapArray, HuntAndKill.mapSize, HuntAndKill.StartingPoint.x, HuntAndKill.StartingPoint.y);
+                        break;
+                    case 4:
+                        mapArray = Sidewinder.GenerateMap();
+                        GenerateItemsAll(mapArray, Sidewinder.mapSize, Sidewinder.xs, Sidewinder.ys);
+                        break;
+                    case 5:
+                        FindNoGOOptionNotWorking(1, size);
+                        FindNoGOOptionNotWorking(2, size);
+                        FindNoGOOptionNotWorking(3, size);
+                        FindNoGOOptionNotWorking(4, size);
+                        return;
+                }
+
+                Save save = new Save();
+                List<Save.Tiles> t = new List<Save.Tiles>();
+                Save.Tiles tile;
+
+                #region generate
+                for (int x = 0; x < mapArray.Length; x++)
+                {
+                    for (int y = 0; y < mapArray.Length; y++)
+                    {
+                        tile.tile = new GridTile();
+                        int num = (int)char.GetNumericValue(mapArray[x][y]);
+                        if (num >= 1)
+                        {
+                            tile.tile.type = GridTile.TileTypes.Ground;
+                        }
+                        if (num == 0)
+                        {
+                            tile.tile.type = GridTile.TileTypes.Wall;
+                        }
+                        tile.pos = new WorldPos(x, y);
+                        if (HuntAndKill.StartingPoint.x == x && HuntAndKill.StartingPoint.y == y)
+                        {
+                            tile.tile.containedObject = GridTile.ContainedObject.StartingPoint;
+                        }
+                        else if (num == 2)
+                        {
+                            tile.tile.containedObject = GridTile.ContainedObject.Spear;
+
+                        }
+                        else if (num == 3)
+                        {
+                            tile.tile.containedObject = GridTile.ContainedObject.Ladder;
+                            NoGo++;
+                        }
+                        else if (num == 4)
+                        {
+                            tile.tile.containedObject = GridTile.ContainedObject.Enemy;
+                        }
+                        else if (num == 5)
+                        {
+                            tile.tile.containedObject = GridTile.ContainedObject.Pit;
+                            NoGo++;
+                        }
+                        else if (num == 6)
+                        {
+                            tile.tile.containedObject = GridTile.ContainedObject.Chest;
+                            NoGo++;
+                        }
+                        t.Add(tile);
+                    }
+                }
+                #endregion
+                noGoAVG += NoGo;
+                switch (algorithm)
+                {
+                    case 1:
+                        Console.WriteLine("Prim          algorithm blind alley number: {0,-5}", NoGo);
+                        break;
+                    case 2:
+                        Console.WriteLine("Growing Tree  algorithm blind alley number: {0,-5}", NoGo);
+                        break;
+                    case 3:
+                        Console.WriteLine("Hunt and Kill algorithm blind alley number: {0,-5}", NoGo);
+                        break;
+                    case 4:
+                        Console.WriteLine("Sidewinder    algorithm blind alley number: {0,-5}", NoGo);
+                        break;
+                }
+
+
+            }
+            noGoAVG /= ComplexityNumber;
+            Console.WriteLine("Blind alley number average: {0,-5}\n", noGoAVG);
         }
     }
 }
