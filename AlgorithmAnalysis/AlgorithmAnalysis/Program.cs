@@ -1555,7 +1555,7 @@ namespace AlgorithmAnalysis
                     case 5:
                         FindNoGOOptionNotWorking(1, size);
                         FindNoGOOptionNotWorking(2, size);
-                        FindNoGOOptionNotWorking(3, size);
+                        FindNoGOOptionNotWorking5(3, size);
                         FindNoGOOptionNotWorking(4, size);
                         return;
                 }
