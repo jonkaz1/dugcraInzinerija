@@ -12,15 +12,24 @@ namespace AlgorithmAnalysis
         public static int y = 3;
         public static int xs = 1;
         public static int ys = 1;
-        public static int mapSize = 15;
-        public static char[][] grid = new char[mapSize][];
+        public static int mapSize;
+        public static char[][] grid;
         public static char[] directions = new char[4];
         public static Random random = new Random();
         //starting pointo nera, jis kaip ir virsutine map'o dalis, kai y=1, x={1;size-1};
 
-        public static char[][] GenerateMap()
+        public static char[][] GenerateMap(int sizeOfMap)
         {
 
+            if (sizeOfMap % 2 == 0)
+            {
+                mapSize = sizeOfMap + 1;
+            }
+            else
+            {
+                mapSize = sizeOfMap;
+            }
+            grid = new char[mapSize][];
             x = 1;
             y = 3;
             xs = 1;
@@ -177,7 +186,7 @@ namespace AlgorithmAnalysis
         }
         public static void print(char[][] map)
         {
-            Console.WriteLine(" size: {0}x{0}\n", map.Length);
+            Console.WriteLine(" size: {0}x{0}\n", map.Length-1);
             for (int i = 0; i < grid.Length; i++)
             {
                 for (int j = 0; j < grid.Length; j++)

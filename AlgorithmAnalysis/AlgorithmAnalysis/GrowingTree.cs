@@ -13,15 +13,24 @@ namespace AlgorithmAnalysis
         public static int y = 0;
         public static int xs = 0;
         public static int ys = 0;
-        public static int mapSize = 15;
+        public static int mapSize;
         public static char direction = 'N';
-        public static char[][] grid = new char[mapSize][];
+        public static char[][] grid;
         public static char[] directions = new char[4];
         public static bool first = true;
         public static LinkedList<char> list = new LinkedList<char>();
-        public static char[][] GenerateMap()
+        public static char[][] GenerateMap(int sizeOfMap)
         {
-
+            if(sizeOfMap%2==0)
+            {
+                mapSize = sizeOfMap+1;
+            }
+            else
+            {
+                mapSize = sizeOfMap;
+            }
+            
+            grid = new char[mapSize][];
             Random random = new Random();
 
             //Gridas pilnas sienu
@@ -298,7 +307,7 @@ namespace AlgorithmAnalysis
         }
         public static void print(char[][] map)
         {
-            Console.WriteLine(" size: {0}x{0}\n", map.Length);
+            Console.WriteLine(" size: {0}x{0}\n", map.Length-1);
             for (int i = 0; i < grid.Length; i++)
             {
                 for (int j = 0; j < grid.Length; j++)

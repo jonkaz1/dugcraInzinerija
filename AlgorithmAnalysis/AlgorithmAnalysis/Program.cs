@@ -350,40 +350,41 @@ namespace AlgorithmAnalysis
         {
             char[][] mapArray = new char[size][];
             Console.WriteLine("\n Double array generated with Hunt&Kill algorithm \n");
-            mapArray = HuntAndKill.GenerateMap();
+            mapArray = HuntAndKill.GenerateMap(size);
+            HuntAndKill.print(mapArray);
 
-            Console.WriteLine(" size: {0}x{0}\n", mapArray.Length);
-            for (int i = 0; i < mapArray.Length; i++)
-            {
-                for (int j = 0; j < mapArray.Length; j++)
-                {
-                    if (HuntAndKill.StartingPoint.x == i && HuntAndKill.StartingPoint.y == j)
-                    {
-                        Console.Write("X");
-                    }
-                    else Console.Write(mapArray[i][j]);
-                }
-                Console.WriteLine();
-            }
+            //Console.WriteLine(" size: {0}x{0}\n", mapArray.Length);
+            //for (int i = 0; i < mapArray.Length; i++)
+            //{
+            //    for (int j = 0; j < mapArray.Length; j++)
+            //    {
+            //        if (HuntAndKill.StartingPoint.x == i && HuntAndKill.StartingPoint.y == j)
+            //        {
+            //            Console.Write("X");
+            //        }
+            //        else Console.Write(mapArray[i][j]);
+            //    }
+            //    Console.WriteLine();
+            //}
         }
         public static void Test_Growing_Tree_Algorithm()
         {
             char[][] mapArray = new char[size][];
             Console.WriteLine("\n Double array generated with Growing Tree algorithm \n");
-            mapArray = GrowingTree.GenerateMap();
+            mapArray = GrowingTree.GenerateMap(size);
             GrowingTree.print(mapArray);
         }
         public static void Test_Sidewinder_Algorithm()
         {
             char[][] mapArray = new char[size][];
             Console.WriteLine("\n Double array generated with Sidewinder algorithm \n");
-            mapArray = Sidewinder.GenerateMap();
+            mapArray = Sidewinder.GenerateMap(size);
             Sidewinder.print(mapArray);
         }
         public static void Test_GenItems()
         {
             char[][] mapArray = new char[size][];
-            mapArray = HuntAndKill.GenerateMap();
+            mapArray = HuntAndKill.GenerateMap(size);
             GenerateItems(mapArray);
 
             for (int i = 0; i < mapArray.Length; i++)
@@ -477,7 +478,7 @@ namespace AlgorithmAnalysis
                 for (int i = 0; i < generatedMapNumber * j; i++)
                 {
                     MapClass mapArray = new MapClass(size);
-                    mapArray.huntKillArray = HuntAndKill.GenerateMap();
+                    mapArray.huntKillArray = HuntAndKill.GenerateMap(size);
                     container.addMap(mapArray, 3);
                 }
                 myTimer.Stop();
@@ -523,7 +524,7 @@ namespace AlgorithmAnalysis
                 for (int i = 0; i < generatedMapNumber * j; i++)
                 {
                     MapClass mapArray = new MapClass(size);
-                    mapArray.GrowingTreeArray = GrowingTree.GenerateMap();
+                    mapArray.GrowingTreeArray = GrowingTree.GenerateMap(size);
                     container.addMap(mapArray, 2);
                 }
                 myTimer.Stop();
@@ -567,7 +568,7 @@ namespace AlgorithmAnalysis
                 for (int i = 0; i < generatedMapNumber * j; i++)
                 {
                     MapClass mapArray = new MapClass(size);
-                    mapArray.SidewinderArray = Sidewinder.GenerateMap();
+                    mapArray.SidewinderArray = Sidewinder.GenerateMap(size);
                     container.addMap(mapArray, 4);
                 }
                 myTimer.Stop();
@@ -739,7 +740,7 @@ namespace AlgorithmAnalysis
                 for (int i = 0; i < generatedMapNumber * j; i++)
                 {
                     MapClass mapArray = new MapClass(size);
-                    mapArray.GrowingTreeArray = GrowingTree.GenerateMap();
+                    mapArray.GrowingTreeArray = GrowingTree.GenerateMap(size);
                     container.addMap(mapArray, 2);
                     if (i % 10 == 0)
                     {
@@ -787,7 +788,7 @@ namespace AlgorithmAnalysis
                 for (int i = 0; i < generatedMapNumber * j; i++)
                 {
                     MapClass mapArray = new MapClass(size);
-                    mapArray.huntKillArray = HuntAndKill.GenerateMap();
+                    mapArray.huntKillArray = HuntAndKill.GenerateMap(size);
                     container.addMap(mapArray, 3);
                     if (i % 10 == 0)
                     {
@@ -835,7 +836,7 @@ namespace AlgorithmAnalysis
                 for (int i = 0; i < generatedMapNumber * j; i++)
                 {
                     MapClass mapArray = new MapClass(size);
-                    mapArray.SidewinderArray = Sidewinder.GenerateMap();
+                    mapArray.SidewinderArray = Sidewinder.GenerateMap(size);
                     container.addMap(mapArray, 4);
                     if (i % 10 == 0)
                     {
@@ -887,15 +888,15 @@ namespace AlgorithmAnalysis
                         GenerateItemsAll(mapArray, primas.length, primas.isStart.Position.x, primas.isStart.Position.y);
                         break;
                     case 2:
-                        mapArray = GrowingTree.GenerateMap();
+                        mapArray = GrowingTree.GenerateMap(size);
                         GenerateItemsAll(mapArray, GrowingTree.mapSize, GrowingTree.xs, GrowingTree.ys );
                         break;
                     case 3:
-                        mapArray = HuntAndKill.GenerateMap();
+                        mapArray = HuntAndKill.GenerateMap(size);
                         GenerateItemsAll(mapArray, HuntAndKill.mapSize, HuntAndKill.StartingPoint.x, HuntAndKill.StartingPoint.y);
                         break;
                     case 4:
-                        mapArray = Sidewinder.GenerateMap();
+                        mapArray = Sidewinder.GenerateMap(size);
                         GenerateItemsAll(mapArray, Sidewinder.mapSize, Sidewinder.xs, Sidewinder.ys);
                         break;
                     case 5:
@@ -908,17 +909,17 @@ namespace AlgorithmAnalysis
                         }
                         else if (((savedMapsNumber / 4) < i)&&((savedMapsNumber / 2) > i))
                         {
-                            mapArray = GrowingTree.GenerateMap();
+                            mapArray = GrowingTree.GenerateMap(size);
                             GenerateItemsAll(mapArray, GrowingTree.mapSize, GrowingTree.xs, GrowingTree.ys );
                         }
                         else if (((savedMapsNumber / 2) <= i) && ((savedMapsNumber / 4 * 3) > i))
                         {
-                            mapArray = HuntAndKill.GenerateMap();
+                            mapArray = HuntAndKill.GenerateMap(size);
                             GenerateItemsAll(mapArray, HuntAndKill.mapSize, HuntAndKill.StartingPoint.x, HuntAndKill.StartingPoint.y);
                         }
                         else
                         {
-                            mapArray = Sidewinder.GenerateMap();
+                            mapArray = Sidewinder.GenerateMap(size);
                             GenerateItemsAll(mapArray, Sidewinder.mapSize, Sidewinder.xs, Sidewinder.ys);
                         }
                         break;
@@ -1278,15 +1279,15 @@ namespace AlgorithmAnalysis
                         GenerateItemsAll(mapArray, primas.length, primas.isStart.Position.x, primas.isStart.Position.y);
                         break;
                     case 2:
-                        mapArray = GrowingTree.GenerateMap();
+                        mapArray = GrowingTree.GenerateMap(size);
                         GenerateItemsAll(mapArray, GrowingTree.mapSize, GrowingTree.xs, GrowingTree.ys);
                         break;
                     case 3:
-                        mapArray = HuntAndKill.GenerateMap();
+                        mapArray = HuntAndKill.GenerateMap(size);
                         GenerateItemsAll(mapArray, HuntAndKill.mapSize, HuntAndKill.StartingPoint.x, HuntAndKill.StartingPoint.y);
                         break;
                     case 4:
-                        mapArray = Sidewinder.GenerateMap();
+                        mapArray = Sidewinder.GenerateMap(size);
                         GenerateItemsAll(mapArray, Sidewinder.mapSize, Sidewinder.xs, Sidewinder.ys);
                         break;
                     case 5:
@@ -1541,15 +1542,15 @@ namespace AlgorithmAnalysis
                         GenerateItemsAll(mapArray, primas.length, primas.isStart.Position.x, primas.isStart.Position.y);
                         break;
                     case 2:
-                        mapArray = GrowingTree.GenerateMap();
+                        mapArray = GrowingTree.GenerateMap(size);
                         GenerateItemsAll(mapArray, GrowingTree.mapSize, GrowingTree.xs, GrowingTree.ys);
                         break;
                     case 3:
-                        mapArray = HuntAndKill.GenerateMap();
+                        mapArray = HuntAndKill.GenerateMap(size);
                         GenerateItemsAll(mapArray, HuntAndKill.mapSize, HuntAndKill.StartingPoint.x, HuntAndKill.StartingPoint.y);
                         break;
                     case 4:
-                        mapArray = Sidewinder.GenerateMap();
+                        mapArray = Sidewinder.GenerateMap(size);
                         GenerateItemsAll(mapArray, Sidewinder.mapSize, Sidewinder.xs, Sidewinder.ys);
                         break;
                     case 5:
