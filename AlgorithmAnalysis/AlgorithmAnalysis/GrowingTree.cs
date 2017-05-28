@@ -8,7 +8,7 @@ namespace AlgorithmAnalysis
 {
     class GrowingTree
     {
-
+        public static bool isOddNumber = true;
         public static int x = 0;
         public static int y = 0;
         public static int xs = 0;
@@ -24,12 +24,14 @@ namespace AlgorithmAnalysis
             if(sizeOfMap%2==0)
             {
                 mapSize = sizeOfMap+1;
+                isOddNumber = true;
             }
             else
             {
                 mapSize = sizeOfMap;
+                isOddNumber = false;
             }
-            
+
             grid = new char[mapSize][];
             Random random = new Random();
 
@@ -52,8 +54,8 @@ namespace AlgorithmAnalysis
             }
 
             //Random pozicija
-            x = RandomNumberOdd(1, 14, random);
-            y = RandomNumberOdd(1, 14, random);
+            x = RandomNumberOdd(1, mapSize-1, random);
+            y = RandomNumberOdd(1, mapSize-1, random);
             xs = x;
             ys = y;
             grid[y][x] = '1';
@@ -307,7 +309,12 @@ namespace AlgorithmAnalysis
         }
         public static void print(char[][] map)
         {
-            Console.WriteLine(" size: {0}x{0}\n", map.Length-1);
+            if (isOddNumber)
+            {
+                Console.WriteLine(" size: {0}x{0}\n", map.Length - 1);
+            }
+            else
+                Console.WriteLine(" size: {0}x{0}\n", map.Length);
             for (int i = 0; i < grid.Length; i++)
             {
                 for (int j = 0; j < grid.Length; j++)

@@ -23,50 +23,6 @@ namespace AlgorithmAnalysis
 
         static void Main(string[] args)
         {
-            //ConsoleKeyInfo cki;
-            //bool exit = false;
-            //do
-            //{
-            //    DisplayMenu();
-            //    cki = Console.ReadKey();
-            //    Console.Clear();
-            //    Console.WriteLine("0 - wall\n1 - ground\n2 - ground spear\n3 - ground ladder\n" +
-            //    "4 - ground enemy\n5 - ground pit\n6 - ground treasure\n");
-            //    switch (cki.KeyChar.ToString())
-            //    {
-            //        case "1":
-            //            Console.WriteLine(">1. Test Prim");
-            //            Test_Prim_Algorithm();
-            //            break;
-            //        case "2":
-            //            Console.WriteLine(">2. Test GrowingTree");
-
-            //            break;
-            //        case "3":
-            //            Console.WriteLine(">3. Test Hunt&Kill");
-            //            Test_HuntAndKill_Algorithm();
-            //            break;
-            //        case "4":
-            //            Console.WriteLine(">4. Test Sidewinder");
-
-            //            break;
-            //        case "5":
-            //            Console.WriteLine(">5. Test generated items");
-            //            Test_GenItems();
-            //            break;
-            //        case "6":
-            //            Console.WriteLine(">6. Analysis");
-            //            Analysis(container);
-            //            break;
-            //        case "7":
-            //            Console.WriteLine(">7. Save generated maps\n");
-            //            SaveMap();
-            //            break;
-            //        case "8":
-            //            exit = true;
-            //            break;
-            //    }
-            //} while (exit == false);
             MainMenu();
         }
         //Menu
@@ -181,22 +137,27 @@ namespace AlgorithmAnalysis
             {
                 //primo
                 case 1:
-                    MapClass mapArray = new MapClass(size);
+                    int sizePrim = TimeTestStart();
+                    MapClass mapArray = new MapClass(sizePrim);
                     Console.WriteLine("\n Double array generated with Prim's algorithm \n");
                     mapArray.generateMapPrim();
                     mapArray.print();
                     break;
                 case 2:
+                    size = TimeTestStart();
                     Test_Growing_Tree_Algorithm();
                     break;
                 case 3:
+                    size = TimeTestStart();
                     Test_HuntAndKill_Algorithm();
                     break;
                 case 4:
+                    size = TimeTestStart();
                     Test_Sidewinder_Algorithm();
                     break;
                 case 5:
-                    MapClass mapArrayA1 = new MapClass(size);
+                    int sizePrim2 = TimeTestStart();
+                    MapClass mapArrayA1 = new MapClass(sizePrim2);
                     Console.WriteLine("\n Double array generated with Prim's algorithm \n");
                     mapArrayA1.generateMapPrim();
                     mapArrayA1.print();
@@ -252,6 +213,7 @@ namespace AlgorithmAnalysis
                     SaveMapOption(4);
                     break;
                 case 5:
+                    container.isAll = false;
                     SaveMapOption(5);
                     break;
             }
@@ -283,24 +245,30 @@ namespace AlgorithmAnalysis
             switch (algorithm)
             {
                 case 1:
-                    //int size1 = TimeTestStart();
-                    FindNoGOOption(1);
+                    int size1 = TimeTestStart();
+                    FindNoGOOptionNotWorking(1, size1);
+                    //FindNoGOOption(1);
                     break;
                 case 2:
-                    //int size2 = TimeTestStart();
-                    FindNoGOOption(2);
+                    int size2 = TimeTestStart();
+                    FindNoGOOptionNotWorking(2, size2);
+                    //FindNoGOOption(2);
                     break;
                 case 3:
-                    //int size3 = TimeTestStart();
-                    FindNoGOOption(3);
+                    int size3 = TimeTestStart();
+                    FindNoGOOptionNotWorking(3, size3);
+                    //FindNoGOOption(3);
                     break;
                 case 4:
-                    //int size4 = TimeTestStart();
-                    FindNoGOOption(4);
+                    int size4 = TimeTestStart();
+                    FindNoGOOptionNotWorking(4, size4);
+                    //FindNoGOOption(4);
                     break;
                 case 5:
-                    //int size5 = TimeTestStart();
-                    FindNoGOOption(5);
+                    int size5 = TimeTestStart();
+                    FindNoGOOptionNotWorking(5, size5);
+                    container.isAll = false;
+                    //FindNoGOOption(5);
                     break;
             }
         }
@@ -352,20 +320,6 @@ namespace AlgorithmAnalysis
             Console.WriteLine("\n Double array generated with Hunt&Kill algorithm \n");
             mapArray = HuntAndKill.GenerateMap(size);
             HuntAndKill.print(mapArray);
-
-            //Console.WriteLine(" size: {0}x{0}\n", mapArray.Length);
-            //for (int i = 0; i < mapArray.Length; i++)
-            //{
-            //    for (int j = 0; j < mapArray.Length; j++)
-            //    {
-            //        if (HuntAndKill.StartingPoint.x == i && HuntAndKill.StartingPoint.y == j)
-            //        {
-            //            Console.Write("X");
-            //        }
-            //        else Console.Write(mapArray[i][j]);
-            //    }
-            //    Console.WriteLine();
-            //}
         }
         public static void Test_Growing_Tree_Algorithm()
         {
@@ -875,6 +829,57 @@ namespace AlgorithmAnalysis
 
         public static void SaveMapOption(int algorithm)
         {
+            int size = TimeTestStart();
+            Console.Write("Enter how much maps will be saved: ");
+
+            string consoleNumber = Console.ReadLine();
+            while (!int.TryParse(consoleNumber, out savedMapsNumber))
+            {
+                Console.WriteLine("\nError: Invalid map number.\n");
+                Console.WriteLine("Enter positive integer number for saved map number.");
+                Console.WriteLine("Enter \"exit\" to go back to the main menu.");
+                Console.Write("\n >> ");
+                consoleNumber = Console.ReadLine();
+                if (consoleNumber.ToLower().Trim() == "exit")
+                {
+                    return;
+                }
+            }
+            while (savedMapsNumber < 0)
+            {
+                Console.WriteLine("\nError: Invalid map number.\n");
+                Console.WriteLine("Enter positive integer number for saved map number.");
+                Console.WriteLine("Enter \"exit\" to go back to the main menu.");
+                Console.Write("\n >> ");
+                consoleNumber = Console.ReadLine();
+                if (consoleNumber.ToLower().Trim() == "exit")
+                {
+                    return;
+                }
+                while (!int.TryParse(consoleNumber, out savedMapsNumber))
+                {
+                    Console.WriteLine("\nError: Invalid map number.\n");
+                    Console.WriteLine("Enter positive integer number for saved map number.");
+                    Console.WriteLine("Enter \"exit\" to go back to the main menu.");
+                    Console.Write("\n >> ");
+                    consoleNumber = Console.ReadLine();
+                    if (consoleNumber.ToLower().Trim() == "exit")
+                    {
+                        return;
+                    }
+                }
+            }
+
+            int lastSavedMapsNumber = Directory.GetFiles("maps\\", "*", SearchOption.TopDirectoryOnly).Length;
+
+            for (int i = 0; i < lastSavedMapsNumber; i++)
+            {
+                if (File.Exists("maps\\" + i + ";" + i + ".json"))
+                {
+                    File.Delete("maps\\" + i + ";" + i + ".json");
+                }
+            }
+
             for (int i = 0; i < savedMapsNumber; i++)
             {
                 char[][] mapArray = new char[size][];
@@ -992,6 +997,7 @@ namespace AlgorithmAnalysis
                 file.Write(Encoding.UTF8.GetBytes(conf), 0, conf.Length);
                 file.Close();
             }
+            lastSavedMapsNumber = savedMapsNumber;
             Console.WriteLine("Saved!");
         }
         public static void GenerateItems(char[][] mapArray)
@@ -1526,7 +1532,10 @@ namespace AlgorithmAnalysis
 
         public static void FindNoGOOptionNotWorking(int algorithm, int size)
         {
-
+            if (algorithm != 5)
+            {
+                Console.WriteLine("Map size: {0, -3}", size);
+            }
             int noGoAVG = 0;
             for (int i = 0; i < ComplexityNumber; i++)
             {

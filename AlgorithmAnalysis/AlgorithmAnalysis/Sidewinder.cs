@@ -8,6 +8,7 @@ namespace AlgorithmAnalysis
 {
     class Sidewinder
     {
+        public static bool isOddNumber = true;
         public static int x = 1;
         public static int y = 3;
         public static int xs = 1;
@@ -24,10 +25,12 @@ namespace AlgorithmAnalysis
             if (sizeOfMap % 2 == 0)
             {
                 mapSize = sizeOfMap + 1;
+                isOddNumber = true;
             }
             else
             {
                 mapSize = sizeOfMap;
+                isOddNumber = false;
             }
             grid = new char[mapSize][];
             x = 1;
@@ -186,7 +189,12 @@ namespace AlgorithmAnalysis
         }
         public static void print(char[][] map)
         {
-            Console.WriteLine(" size: {0}x{0}\n", map.Length-1);
+            if (isOddNumber)
+            {
+                Console.WriteLine(" size: {0}x{0}\n", map.Length - 1);
+            }
+            else
+                Console.WriteLine(" size: {0}x{0}\n", map.Length);
             for (int i = 0; i < grid.Length; i++)
             {
                 for (int j = 0; j < grid.Length; j++)
