@@ -17,11 +17,14 @@ namespace AlgorithmAnalysis
         public static char[] directions = new char[4];
         public static Random random = new Random();
         //starting pointo nera, jis kaip ir virsutine map'o dalis, kai y=1, x={1;size-1};
+
         public static char[][] GenerateMap()
         {
 
-
-
+            x = 1;
+            y = 3;
+            xs = 1;
+            ys = 1;
             for (int i = 0; i < grid.Length; i++)
             {
                 grid[i] = new char[mapSize];
