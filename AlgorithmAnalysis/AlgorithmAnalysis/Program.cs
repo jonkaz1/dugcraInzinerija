@@ -109,14 +109,17 @@ namespace AlgorithmAnalysis
                 switch (cki.KeyChar.ToString())
                 {
                     case "1":
+                        container.isAll = false;
                         Console.WriteLine(">1. Ram analysis");
                         RamTest(algorithm);
                         break;
                     case "2":
+                        container.isAll = false;
                         Console.WriteLine(">2. Time analysis");
                         TimeTest(algorithm);
                         break;
                     case "3":
+                        container.isAll = false;
                         Console.WriteLine(">3. analysis");
                         ComplexityTest(algorithm);
                         break;
